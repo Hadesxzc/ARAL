@@ -5,7 +5,7 @@ POST /api/sus — submit SUS questionnaire
 import json
 import os
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 router = APIRouter()
@@ -17,8 +17,8 @@ SUS_FILE = os.path.join(DATA_DIR, "sus_responses.json")
 class AssessmentInput(BaseModel):
     degree_program: str
     job_title: str
-    skills: dict[str, int]
-    task_distribution: Optional[dict[str, float]] = None
+    skills: Optional[dict] = Field(default_factory=dict)
+    task_distribution: Optional[dict] = Field(default_factory=dict)
 
 
 class SusInput(BaseModel):
@@ -40,50 +40,72 @@ def _get_skill_label(skill_id: str, cmos: dict) -> str:
     return skill_id.replace("skill_", "").replace("_", " ").title()
 
 
+def _get_program_typical_skills(degree_program: str) -> dict[str, int]:
+    """Return the typical (mean) skill profile for a program based on POARD averages."""
+    from model.train import PROGRAM_SKILLS
+    program_skill_ids = PROGRAM_SKILLS.get(degree_program, [])
+    # Assume 70% proficiency rate for all program skills (POARD mean is ~0.72)
+    return {skill_id: 1 for skill_id in program_skill_ids}
+
+
 def _compute_skill_gaps(
     degree_program: str,
-    skills: dict[str, int],
+    skills: dict,
     shap_explanation: dict,
     cmos: dict,
+    use_typical: bool = False,
 ) -> list[dict]:
-    """Identify skill gaps from protective SHAP factors the user lacks."""
-    gaps = []
+    """
+    Identify skill gaps.
 
+    When `use_typical=True` (no user skills provided), rank gaps by absolute
+    SKILL_RISK_WEIGHT — the most protective skills for the program that are
+    underutilised in the labour market become the upskilling targets.
+
+    When `use_typical=False` (user provided skills), use SHAP protective factors
+    for skills the user doesn't have.
+    """
+    from model.train import SKILL_RISK_WEIGHTS, PROGRAM_SKILLS
+
+    gaps = []
     program_data = cmos.get(degree_program, {})
     ched_skill_ids = {s["id"] for s in program_data.get("skills", [])}
 
-    protective_factors = shap_explanation.get("top_protective_factors", [])
+    if use_typical:
+        # Rule-based: pick the most protective skills for this program
+        program_skill_ids = PROGRAM_SKILLS.get(degree_program, [])
+        scored = []
+        for skill_id in program_skill_ids:
+            weight = SKILL_RISK_WEIGHTS.get(skill_id, 0)
+            if weight < 0:  # protective — negative weight = reduces risk
+                scored.append((skill_id, abs(weight)))
+        scored.sort(key=lambda x: x[1], reverse=True)
 
-    for factor in protective_factors:
-        skill_id = factor["skill"]
-        if not skill_id.startswith("skill_"):
-            continue
-
-        user_has_skill = bool(skills.get(skill_id, 0))
-        in_ched = skill_id in ched_skill_ids
-
-        if not user_has_skill:
-            gap_type = "implementation" if in_ched else "design"
+        for skill_id, impact in scored[:6]:
+            in_ched = skill_id in ched_skill_ids
             gaps.append({
                 "skill_id": skill_id,
                 "skill_label": _get_skill_label(skill_id, cmos),
                 "in_ched_cmo": in_ched,
-                "gap_type": gap_type,
-                "impact_score": factor["contribution"],
+                "gap_type": "implementation" if in_ched else "design",
+                "impact_score": round(impact, 4),
             })
-
-    # Also add skills from risk factors that the user has (to encourage awareness)
-    # but only if their removal would help
-    risk_factors = shap_explanation.get("top_risk_factors", [])
-    for factor in risk_factors:
-        skill_id = factor["skill"]
-        if not skill_id.startswith("skill_"):
-            continue
-        user_has_skill = bool(skills.get(skill_id, 0))
-        if user_has_skill and factor["contribution"] > 0.08:
-            in_ched = skill_id in ched_skill_ids
-            # Check if there's a complementary protective skill missing
-            pass  # Don't flood the gap list
+    else:
+        # SHAP-based: protective factors the user doesn't currently have
+        for factor in shap_explanation.get("top_protective_factors", []):
+            skill_id = factor["skill"]
+            if not skill_id.startswith("skill_"):
+                continue
+            user_has_skill = bool(skills.get(skill_id, 0))
+            if not user_has_skill:
+                in_ched = skill_id in ched_skill_ids
+                gaps.append({
+                    "skill_id": skill_id,
+                    "skill_label": _get_skill_label(skill_id, cmos),
+                    "in_ched_cmo": in_ched,
+                    "gap_type": "implementation" if in_ched else "design",
+                    "impact_score": round(factor["contribution"], 4),
+                })
 
     return gaps[:6]
 
@@ -115,13 +137,19 @@ async def submit_assessment(body: AssessmentInput):
     from shap_analysis.explain import explain_prediction
     from gemini.recommend import generate_recommendations
 
-    # Run prediction
+    skills = body.skills or {}
+    task_distribution = body.task_distribution or {}
+    use_typical = len(skills) == 0
+
+    # If no skills provided, use program typical profile
+    effective_skills = skills if skills else _get_program_typical_skills(body.degree_program)
+
     try:
         result = predict(
             degree_program=body.degree_program,
             job_title=body.job_title,
-            skills=body.skills,
-            task_distribution=body.task_distribution,
+            skills=effective_skills,
+            task_distribution=task_distribution if task_distribution else None,
         )
     except FileNotFoundError as e:
         raise HTTPException(status_code=503, detail=f"Model not ready: {str(e)}")
@@ -131,44 +159,36 @@ async def submit_assessment(body: AssessmentInput):
     score = result["score"]
     risk = classify_risk(score)
 
-    # Get program averages and percentile
     try:
         program_averages = get_program_averages()
         program_average = program_averages.get(body.degree_program, score)
         percentile = get_score_percentile(score, body.degree_program)
     except Exception:
         program_averages = {
-            "BS Accountancy": 0.68,
-            "BS Business Administration": 0.65,
-            "BS Information Technology": 0.42,
-            "BS Computer Science": 0.31,
-            "Bachelor of Elementary Education": 0.38,
-            "BS Nursing": 0.29,
+            "BS Accountancy": 0.66, "BS Business Administration": 0.56,
+            "BS Information Technology": 0.42, "BS Computer Science": 0.31,
+            "Bachelor of Elementary Education": 0.36, "BS Nursing": 0.27,
         }
         program_average = program_averages.get(body.degree_program, 0.50)
-        percentile = int(50)
+        percentile = 50
 
     # SHAP explanation
     try:
-        import pandas as pd
-        import sys
-        sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
         shap_explanation = explain_prediction(
             result["X"],
             body.degree_program,
-            body.skills,
-            body.task_distribution or {},
+            effective_skills,
+            task_distribution,
         )
     except Exception as e:
         print(f"SHAP error: {e}")
-        shap_explanation = {
-            "top_risk_factors": [],
-            "top_protective_factors": [],
-        }
+        shap_explanation = {"top_risk_factors": [], "top_protective_factors": []}
 
     # Skill gaps
     cmos = _load_cmos()
-    skill_gaps = _compute_skill_gaps(body.degree_program, body.skills, shap_explanation, cmos)
+    skill_gaps = _compute_skill_gaps(
+        body.degree_program, effective_skills, shap_explanation, cmos, use_typical=use_typical
+    )
 
     # Course recommendations
     try:
@@ -202,7 +222,6 @@ async def submit_sus(body: SusInput):
     sus_score = calculate_sus(body.responses)
     interpretation, grade = interpret_sus(sus_score)
 
-    # Persist
     entry = {
         "responses": body.responses,
         "sus_score": sus_score,
@@ -223,8 +242,4 @@ async def submit_sus(body: SusInput):
     except Exception as e:
         print(f"SUS persistence error: {e}")
 
-    return {
-        "sus_score": round(sus_score, 2),
-        "interpretation": interpretation,
-        "grade": grade,
-    }
+    return {"sus_score": round(sus_score, 2), "interpretation": interpretation, "grade": grade}
