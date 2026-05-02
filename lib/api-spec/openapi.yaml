@@ -2,21 +2,26 @@ openapi: 3.1.0
 info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
-  version: 0.1.0
-  description: API specification
+  version: 1.0.0
+  description: ARAL — Automation Risk Assessment API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: programs
+    description: Degree program operations
+  - name: assessment
+    description: Assessment operations
+  - name: analytics
+    description: Analytics and research dashboard
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +29,116 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /programs:
+    get:
+      operationId: getPrograms
+      tags: [programs]
+      summary: Get all degree programs
+      responses:
+        "200":
+          description: List of covered degree programs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgramsResponse"
+
+  /skills/{program}:
+    get:
+      operationId: getSkillsByProgram
+      tags: [programs]
+      summary: Get skills checklist for a degree program
+      parameters:
+        - name: program
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Skills checklist for the program
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillsResponse"
+
+  /assess:
+    post:
+      operationId: submitAssessment
+      tags: [assessment]
+      summary: Submit assessment and get automation vulnerability results
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssessmentInput"
+      responses:
+        "200":
+          description: Full assessment results with vulnerability score, SHAP explanation, skill gaps, and course recommendations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssessmentResult"
+
+  /analytics/program-summary:
+    get:
+      operationId: getProgramSummary
+      tags: [analytics]
+      summary: Get aggregated SHAP findings per degree program (research dashboard)
+      responses:
+        "200":
+          description: Program analytics summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgramSummaryResponse"
+
+  /analytics/global-stats:
+    get:
+      operationId: getGlobalStats
+      tags: [analytics]
+      summary: Get overall statistics across all programs
+      responses:
+        "200":
+          description: Global statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalStatsResponse"
+
+  /sus:
+    post:
+      operationId: submitSus
+      tags: [assessment]
+      summary: Submit System Usability Scale questionnaire responses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SusInput"
+      responses:
+        "200":
+          description: SUS score result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SusResult"
+
+  /sus/results:
+    get:
+      operationId: getSusResults
+      tags: [analytics]
+      summary: Get aggregated SUS results (admin)
+      responses:
+        "200":
+          description: SUS results summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SusResultsSummary"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +149,309 @@ components:
       required:
         - status
 
+    ProgramsResponse:
+      type: object
+      properties:
+        programs:
+          type: array
+          items:
+            type: string
+      required:
+        - programs
+
+    Skill:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        source:
+          type: string
+        description:
+          type: string
+      required:
+        - id
+        - label
+        - source
+
+    SkillsResponse:
+      type: object
+      properties:
+        program:
+          type: string
+        cmo_reference:
+          type: string
+        skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/Skill"
+      required:
+        - program
+        - cmo_reference
+        - skills
+
+    AssessmentInput:
+      type: object
+      properties:
+        degree_program:
+          type: string
+        job_title:
+          type: string
+        skills:
+          type: object
+          additionalProperties:
+            type: integer
+        task_distribution:
+          type: object
+          additionalProperties:
+            type: number
+      required:
+        - degree_program
+        - job_title
+        - skills
+
+    ShapFactor:
+      type: object
+      properties:
+        skill:
+          type: string
+        skill_label:
+          type: string
+        contribution:
+          type: number
+        direction:
+          type: string
+          enum: [increases_risk, reduces_risk]
+      required:
+        - skill
+        - skill_label
+        - contribution
+        - direction
+
+    SkillGap:
+      type: object
+      properties:
+        skill_id:
+          type: string
+        skill_label:
+          type: string
+        in_ched_cmo:
+          type: boolean
+        gap_type:
+          type: string
+          enum: [implementation, design]
+        impact_score:
+          type: number
+      required:
+        - skill_id
+        - skill_label
+        - in_ched_cmo
+        - gap_type
+        - impact_score
+
+    CourseRecommendation:
+      type: object
+      properties:
+        skill:
+          type: string
+        course_title:
+          type: string
+        platform:
+          type: string
+        url:
+          type: string
+        is_free:
+          type: boolean
+        reason:
+          type: string
+      required:
+        - skill
+        - course_title
+        - platform
+        - url
+        - is_free
+
+    AssessmentResult:
+      type: object
+      properties:
+        vulnerability_score:
+          type: number
+        risk_level:
+          type: string
+          enum: [Low, Moderate, High, "Very High"]
+        risk_label:
+          type: string
+        risk_color:
+          type: string
+        program_average:
+          type: number
+        percentile:
+          type: number
+        shap_explanation:
+          type: object
+          properties:
+            top_risk_factors:
+              type: array
+              items:
+                $ref: "#/components/schemas/ShapFactor"
+            top_protective_factors:
+              type: array
+              items:
+                $ref: "#/components/schemas/ShapFactor"
+          required:
+            - top_risk_factors
+            - top_protective_factors
+        skill_gaps:
+          type: array
+          items:
+            $ref: "#/components/schemas/SkillGap"
+        recommendations:
+          type: array
+          items:
+            $ref: "#/components/schemas/CourseRecommendation"
+        program_comparison:
+          type: object
+          additionalProperties:
+            type: number
+      required:
+        - vulnerability_score
+        - risk_level
+        - risk_label
+        - risk_color
+        - program_average
+        - percentile
+        - shap_explanation
+        - skill_gaps
+        - recommendations
+        - program_comparison
+
+    ProgramSummaryItem:
+      type: object
+      properties:
+        program:
+          type: string
+        mean_vulnerability:
+          type: number
+        respondent_count:
+          type: integer
+        top_risk_skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShapFactor"
+        top_protective_skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShapFactor"
+        curriculum_gaps:
+          type: array
+          items:
+            $ref: "#/components/schemas/SkillGap"
+      required:
+        - program
+        - mean_vulnerability
+        - respondent_count
+        - top_risk_skills
+        - top_protective_skills
+        - curriculum_gaps
+
+    ProgramSummaryResponse:
+      type: object
+      properties:
+        programs:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProgramSummaryItem"
+      required:
+        - programs
+
+    GlobalStatsResponse:
+      type: object
+      properties:
+        total_respondents:
+          type: integer
+        overall_mean_vulnerability:
+          type: number
+        score_distribution:
+          type: array
+          items:
+            type: object
+            properties:
+              range:
+                type: string
+              count:
+                type: integer
+            required:
+              - range
+              - count
+        program_averages:
+          type: object
+          additionalProperties:
+            type: number
+        top_global_risk_skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShapFactor"
+        top_global_protective_skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShapFactor"
+      required:
+        - total_respondents
+        - overall_mean_vulnerability
+        - score_distribution
+        - program_averages
+        - top_global_risk_skills
+        - top_global_protective_skills
+
+    SusInput:
+      type: object
+      properties:
+        responses:
+          type: array
+          items:
+            type: integer
+          minItems: 10
+          maxItems: 10
+        degree_program:
+          type: string
+      required:
+        - responses
+
+    SusResult:
+      type: object
+      properties:
+        sus_score:
+          type: number
+        interpretation:
+          type: string
+        grade:
+          type: string
+      required:
+        - sus_score
+        - interpretation
+        - grade
+
+    SusResultsSummary:
+      type: object
+      properties:
+        total_responses:
+          type: integer
+        mean_sus_score:
+          type: number
+        interpretation:
+          type: string
+        score_by_program:
+          type: object
+          additionalProperties:
+            type: number
+        responses:
+          type: array
+          items:
+            $ref: "#/components/schemas/SusResult"
+      required:
+        - total_responses
+        - mean_sus_score
+        - interpretation
+        - score_by_program
+        - responses

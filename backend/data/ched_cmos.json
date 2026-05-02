@@ -1,0 +1,92 @@
+{
+  "BS Accountancy": {
+    "cmo_reference": "CMO No. 3 s. 2007 as amended",
+    "skills": [
+      {"id": "skill_financial_statements", "label": "Financial Statement Preparation", "source": "CMO No. 3 s. 2007", "description": "Prepare financial statements in accordance with PFRS"},
+      {"id": "skill_tax_computation", "label": "Tax Computation and Filing", "source": "CMO No. 3 s. 2007", "description": "Compute and file tax returns under Philippine tax law"},
+      {"id": "skill_auditing", "label": "Auditing Procedures", "source": "CMO No. 3 s. 2007", "description": "Apply auditing standards in manual and computerized environments"},
+      {"id": "skill_cost_accounting", "label": "Cost Accounting", "source": "CMO No. 3 s. 2007", "description": "Apply cost accounting methods to business decisions"},
+      {"id": "skill_bookkeeping", "label": "Bookkeeping and Recording", "source": "CMO No. 3 s. 2007", "description": "Maintain books of accounts and financial records"},
+      {"id": "skill_business_law", "label": "Business Law and Ethics", "source": "CMO No. 3 s. 2007", "description": "Apply legal and ethical principles in accounting practice"},
+      {"id": "skill_management_accounting", "label": "Management Accounting", "source": "CMO No. 3 s. 2007", "description": "Use accounting information for managerial decision-making"},
+      {"id": "skill_pfrs", "label": "Philippine Financial Reporting Standards", "source": "CMO No. 3 s. 2007", "description": "Apply PFRS in financial reporting"},
+      {"id": "skill_computerized_accounting", "label": "Computerized Accounting Systems", "source": "CMO No. 3 s. 2007", "description": "Use accounting software and computerized systems"},
+      {"id": "skill_data_interpretation", "label": "Data Analysis and Interpretation", "source": "CMO No. 3 s. 2007", "description": "Analyze and interpret financial and non-financial data"}
+    ]
+  },
+  "BS Business Administration": {
+    "cmo_reference": "CMO No. 17 s. 2017",
+    "skills": [
+      {"id": "skill_marketing_principles", "label": "Marketing Principles and Strategies", "source": "CMO No. 17 s. 2017", "description": "Apply core marketing concepts and strategic planning"},
+      {"id": "skill_human_resource_mgmt", "label": "Human Resource Management", "source": "CMO No. 17 s. 2017", "description": "Manage human resources effectively"},
+      {"id": "skill_operations_management", "label": "Operations Management", "source": "CMO No. 17 s. 2017", "description": "Optimize business operations and supply chains"},
+      {"id": "skill_business_communication", "label": "Business Communication", "source": "CMO No. 17 s. 2017", "description": "Communicate effectively in business contexts"},
+      {"id": "skill_financial_management", "label": "Financial Management", "source": "CMO No. 17 s. 2017", "description": "Manage organizational finances and investments"},
+      {"id": "skill_entrepreneurship", "label": "Entrepreneurship and Innovation", "source": "CMO No. 17 s. 2017", "description": "Develop and launch entrepreneurial ventures"},
+      {"id": "skill_business_ethics", "label": "Business Ethics and Corporate Governance", "source": "CMO No. 17 s. 2017", "description": "Apply ethical principles in business decisions"},
+      {"id": "skill_strategic_management", "label": "Strategic Management", "source": "CMO No. 17 s. 2017", "description": "Formulate and implement business strategies"},
+      {"id": "skill_consumer_behavior", "label": "Consumer Behavior Analysis", "source": "CMO No. 17 s. 2017", "description": "Analyze consumer decision-making processes"},
+      {"id": "skill_business_research", "label": "Business Research Methods", "source": "CMO No. 17 s. 2017", "description": "Conduct and evaluate business research"}
+    ]
+  },
+  "BS Information Technology": {
+    "cmo_reference": "CMO No. 25 s. 2015",
+    "skills": [
+      {"id": "skill_programming", "label": "Programming (any language)", "source": "CMO No. 25 s. 2015", "description": "Write and debug programs in at least one programming language"},
+      {"id": "skill_database_management", "label": "Database Management", "source": "CMO No. 25 s. 2015", "description": "Design, implement, and manage relational databases"},
+      {"id": "skill_network_administration", "label": "Network Administration", "source": "CMO No. 25 s. 2015", "description": "Configure and maintain computer networks"},
+      {"id": "skill_web_development", "label": "Web Development", "source": "CMO No. 25 s. 2015", "description": "Build and deploy web applications"},
+      {"id": "skill_systems_analysis", "label": "Systems Analysis and Design", "source": "CMO No. 25 s. 2015", "description": "Analyze and design information systems"},
+      {"id": "skill_cybersecurity", "label": "Cybersecurity Fundamentals", "source": "CMO No. 25 s. 2015", "description": "Identify and mitigate cybersecurity threats"},
+      {"id": "skill_technical_documentation", "label": "Technical Documentation", "source": "CMO No. 25 s. 2015", "description": "Create clear technical manuals and documentation"},
+      {"id": "skill_software_testing", "label": "Software Testing and QA", "source": "CMO No. 25 s. 2015", "description": "Test software for quality and correctness"},
+      {"id": "skill_cloud_computing", "label": "Cloud Computing Basics", "source": "CMO No. 25 s. 2015", "description": "Deploy and manage cloud-based services"},
+      {"id": "skill_it_project_management", "label": "IT Project Management", "source": "CMO No. 25 s. 2015", "description": "Plan and manage IT projects"}
+    ]
+  },
+  "BS Computer Science": {
+    "cmo_reference": "CMO No. 25 s. 2015",
+    "skills": [
+      {"id": "skill_algorithms_ds", "label": "Algorithms and Data Structures", "source": "CMO No. 25 s. 2015", "description": "Design and analyze efficient algorithms"},
+      {"id": "skill_software_engineering", "label": "Software Engineering", "source": "CMO No. 25 s. 2015", "description": "Apply software engineering methodologies"},
+      {"id": "skill_operating_systems", "label": "Operating Systems", "source": "CMO No. 25 s. 2015", "description": "Understand OS principles and system programming"},
+      {"id": "skill_computer_architecture", "label": "Computer Architecture", "source": "CMO No. 25 s. 2015", "description": "Understand computer hardware and architecture"},
+      {"id": "skill_machine_learning_basics", "label": "Machine Learning Fundamentals", "source": "CMO No. 25 s. 2015", "description": "Apply machine learning algorithms to problems"},
+      {"id": "skill_theory_of_computation", "label": "Theory of Computation", "source": "CMO No. 25 s. 2015", "description": "Understand formal languages and computability"},
+      {"id": "skill_mobile_development", "label": "Mobile Application Development", "source": "CMO No. 25 s. 2015", "description": "Build mobile apps for iOS or Android"},
+      {"id": "skill_parallel_computing", "label": "Parallel and Distributed Computing", "source": "CMO No. 25 s. 2015", "description": "Design parallel and distributed systems"},
+      {"id": "skill_research_methods_cs", "label": "Research Methods in CS", "source": "CMO No. 25 s. 2015", "description": "Conduct and evaluate CS research"},
+      {"id": "skill_capstone_systems", "label": "Capstone System Development", "source": "CMO No. 25 s. 2015", "description": "Design and build a full capstone system"}
+    ]
+  },
+  "Bachelor of Elementary Education": {
+    "cmo_reference": "CMO No. 74 s. 2017",
+    "skills": [
+      {"id": "skill_lesson_planning", "label": "Lesson Planning and Design", "source": "CMO No. 74 s. 2017", "description": "Create effective lesson plans aligned with curriculum"},
+      {"id": "skill_classroom_management", "label": "Classroom Management", "source": "CMO No. 74 s. 2017", "description": "Manage classroom behavior and environment"},
+      {"id": "skill_curriculum_development", "label": "Curriculum Development", "source": "CMO No. 74 s. 2017", "description": "Design and evaluate educational curricula"},
+      {"id": "skill_educational_assessment", "label": "Educational Assessment and Evaluation", "source": "CMO No. 74 s. 2017", "description": "Assess and evaluate student learning"},
+      {"id": "skill_child_development", "label": "Child and Adolescent Development", "source": "CMO No. 74 s. 2017", "description": "Understand developmental stages of learners"},
+      {"id": "skill_inclusive_education", "label": "Inclusive Education", "source": "CMO No. 74 s. 2017", "description": "Teach learners with diverse needs"},
+      {"id": "skill_teaching_strategies", "label": "Differentiated Teaching Strategies", "source": "CMO No. 74 s. 2017", "description": "Apply varied teaching methods"},
+      {"id": "skill_educational_technology", "label": "Educational Technology Integration", "source": "CMO No. 74 s. 2017", "description": "Integrate technology into instruction"},
+      {"id": "skill_professional_ethics_ed", "label": "Professional Ethics in Education", "source": "CMO No. 74 s. 2017", "description": "Apply ethical standards in teaching practice"},
+      {"id": "skill_community_engagement", "label": "Community Engagement and Linkages", "source": "CMO No. 74 s. 2017", "description": "Build community partnerships for education"}
+    ]
+  },
+  "BS Nursing": {
+    "cmo_reference": "CMO No. 14 s. 2009",
+    "skills": [
+      {"id": "skill_patient_assessment", "label": "Patient Health Assessment", "source": "CMO No. 14 s. 2009", "description": "Conduct comprehensive health assessments"},
+      {"id": "skill_medication_administration", "label": "Medication Administration", "source": "CMO No. 14 s. 2009", "description": "Administer medications safely and accurately"},
+      {"id": "skill_health_education", "label": "Health Education and Promotion", "source": "CMO No. 14 s. 2009", "description": "Educate patients and communities on health"},
+      {"id": "skill_nursing_care_planning", "label": "Nursing Care Planning", "source": "CMO No. 14 s. 2009", "description": "Develop individualized nursing care plans"},
+      {"id": "skill_infection_control", "label": "Infection Control and Prevention", "source": "CMO No. 14 s. 2009", "description": "Apply infection prevention protocols"},
+      {"id": "skill_emergency_care", "label": "Emergency and Critical Care", "source": "CMO No. 14 s. 2009", "description": "Provide emergency and critical patient care"},
+      {"id": "skill_maternal_child_nursing", "label": "Maternal and Child Nursing", "source": "CMO No. 14 s. 2009", "description": "Care for mothers and children"},
+      {"id": "skill_community_health_nursing", "label": "Community Health Nursing", "source": "CMO No. 14 s. 2009", "description": "Deliver community-based nursing care"},
+      {"id": "skill_mental_health_nursing", "label": "Mental Health Nursing", "source": "CMO No. 14 s. 2009", "description": "Provide mental health nursing care"},
+      {"id": "skill_nursing_research", "label": "Nursing Research", "source": "CMO No. 14 s. 2009", "description": "Apply research evidence to nursing practice"}
+    ]
+  }
+}
