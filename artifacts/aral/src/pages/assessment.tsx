@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
@@ -17,9 +16,18 @@ import {
 } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   useGetPrograms,
+  useGetJobsByProgram,
   useSubmitAssessment,
   getGetProgramsQueryKey,
+  getGetJobsByProgramQueryKey,
 } from "@workspace/api-client-react";
 
 const PROGRAMS_FALLBACK = [
@@ -66,12 +74,30 @@ export default function Assessment() {
   const { data: programsData } = useGetPrograms({
     query: { queryKey: getGetProgramsQueryKey() },
   });
+
+  const { data: jobsData, isLoading: jobsLoading } = useGetJobsByProgram(
+    selectedProgram,
+    {
+      query: {
+        queryKey: getGetJobsByProgramQueryKey(selectedProgram),
+        enabled: !!selectedProgram,
+      },
+    }
+  );
+
   const { mutate: submitAssessment } = useSubmitAssessment();
 
   const programs: string[] = programsData?.programs ?? PROGRAMS_FALLBACK;
+  const jobOptions: string[] = jobsData?.jobs ?? [];
+
+  const handleProgramSelect = (program: string) => {
+    setSelectedProgram(program);
+    setJobTitle("");
+    setOpen(false);
+  };
 
   const handleSubmit = () => {
-    if (!selectedProgram || !jobTitle.trim()) return;
+    if (!selectedProgram || !jobTitle) return;
     setIsSubmitting(true);
 
     const interval = setInterval(() => {
@@ -82,7 +108,7 @@ export default function Assessment() {
       {
         data: {
           degree_program: selectedProgram,
-          job_title: jobTitle.trim(),
+          job_title: jobTitle,
           skills: {},
           task_distribution: {},
         },
@@ -92,7 +118,7 @@ export default function Assessment() {
           clearInterval(interval);
           localStorage.setItem(
             "aral_last_result",
-            JSON.stringify({ ...result, degree_program: selectedProgram, job_title: jobTitle.trim() })
+            JSON.stringify({ ...result, degree_program: selectedProgram, job_title: jobTitle })
           );
           setLocation("/results");
         },
@@ -144,8 +170,8 @@ export default function Assessment() {
           <Badge className="mb-4 text-xs tracking-wider uppercase">Automation Risk Assessment</Badge>
           <h1 className="text-3xl font-bold text-foreground mb-3">Predict Your Career Risk</h1>
           <p className="text-muted-foreground leading-relaxed">
-            Enter your degree program and current or target job title. ARAL will predict your automation 
-            vulnerability using a Random Forest model trained on 1,000+ Filipino graduate respondents.
+            Select your degree program and current or target job title. ARAL will predict your automation
+            vulnerability using a Random Forest model trained on Filipino graduate respondents.
           </p>
         </div>
 
@@ -153,16 +179,19 @@ export default function Assessment() {
           <CardHeader>
             <CardTitle className="text-lg">Your Academic Profile</CardTitle>
             <CardDescription>
-              Skills and task data are derived from your program's CHED CMO curriculum standards and 
+              Skills and task data are derived from your program's CHED CMO curriculum standards and
               typical occupational profiles — no additional input required.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Program Selector */}
+            {/* Step 1 — Program */}
             <div className="space-y-2">
-              <Label className="text-sm font-medium">
-                Degree Program <span className="text-destructive">*</span>
-              </Label>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold flex-shrink-0">1</span>
+                <Label className="text-sm font-medium">
+                  Degree Program <span className="text-destructive">*</span>
+                </Label>
+              </div>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <button
@@ -195,10 +224,7 @@ export default function Assessment() {
                           <CommandItem
                             key={program}
                             value={program}
-                            onSelect={() => {
-                              setSelectedProgram(program);
-                              setOpen(false);
-                            }}
+                            onSelect={() => handleProgramSelect(program)}
                             className="py-3 cursor-pointer"
                           >
                             <div
@@ -227,32 +253,60 @@ export default function Assessment() {
               )}
             </div>
 
-            {/* Job Title */}
+            {/* Step 2 — Job Title Dropdown */}
             <div className="space-y-2">
-              <Label htmlFor="job-title" className="text-sm font-medium">
-                Current or Target Job Title <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                id="job-title"
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
-                placeholder="e.g. Junior Auditor, Software Engineer, Registered Nurse..."
-                className="h-12 text-sm"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && selectedProgram && jobTitle.trim().length >= 2) {
-                    handleSubmit();
-                  }
-                }}
-              />
-              <p className="text-xs text-muted-foreground">
-                Fresh graduate? Enter your target role or "Fresh Graduate."
-              </p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className={`w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold flex-shrink-0 ${selectedProgram ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>2</span>
+                <Label className={`text-sm font-medium ${!selectedProgram ? "text-muted-foreground" : ""}`}>
+                  Current or Target Job Title <span className="text-destructive">*</span>
+                </Label>
+              </div>
+
+              {!selectedProgram ? (
+                <div className="h-11 w-full rounded-lg border-2 border-dashed border-border bg-muted/30 flex items-center px-4">
+                  <span className="text-sm text-muted-foreground">Select a degree program first</span>
+                </div>
+              ) : jobsLoading ? (
+                <div className="h-11 w-full rounded-lg border-2 border-border bg-muted/30 flex items-center px-4 gap-3">
+                  <Spinner className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">Loading job titles...</span>
+                </div>
+              ) : (
+                <Select value={jobTitle} onValueChange={setJobTitle}>
+                  <SelectTrigger
+                    className={`h-11 text-sm border-2 transition-all ${
+                      jobTitle
+                        ? "border-primary/40 bg-primary/5"
+                        : "border-border hover:border-primary/30"
+                    }`}
+                  >
+                    <SelectValue placeholder="Select a job title..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {jobOptions.length === 0 ? (
+                      <div className="py-3 px-4 text-sm text-muted-foreground">No job titles found.</div>
+                    ) : (
+                      jobOptions.map((job) => (
+                        <SelectItem key={job} value={job} className="py-2.5 cursor-pointer">
+                          {job}
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
+
+              {jobTitle && (
+                <p className="text-xs text-muted-foreground">
+                  Task distribution for <span className="font-medium text-foreground">{jobTitle}</span> will be used in the assessment.
+                </p>
+              )}
             </div>
 
             <div className="pt-2">
               <Button
                 onClick={handleSubmit}
-                disabled={!selectedProgram || jobTitle.trim().length < 2}
+                disabled={!selectedProgram || !jobTitle}
                 className="w-full h-12 text-base font-semibold"
                 size="lg"
               >
