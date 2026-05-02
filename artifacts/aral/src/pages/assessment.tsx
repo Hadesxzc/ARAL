@@ -25,9 +25,11 @@ import {
 import {
   useGetPrograms,
   useGetJobsByProgram,
+  useGetSkillsByProgram,
   useSubmitAssessment,
   getGetProgramsQueryKey,
   getGetJobsByProgramQueryKey,
+  getGetSkillsByProgramQueryKey,
 } from "@workspace/api-client-react";
 
 const PROGRAMS_FALLBACK = [
@@ -38,6 +40,14 @@ const PROGRAMS_FALLBACK = [
   "Bachelor of Elementary Education",
   "BS Nursing",
 ];
+
+const PROFICIENCY_LABELS: Record<number, { label: string; color: string }> = {
+  1: { label: "None",         color: "bg-red-100 text-red-700 border-red-300 hover:bg-red-200" },
+  2: { label: "Beginner",     color: "bg-orange-100 text-orange-700 border-orange-300 hover:bg-orange-200" },
+  3: { label: "Intermediate", color: "bg-yellow-100 text-yellow-700 border-yellow-300 hover:bg-yellow-200" },
+  4: { label: "Proficient",   color: "bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200" },
+  5: { label: "Expert",       color: "bg-green-100 text-green-700 border-green-300 hover:bg-green-200" },
+};
 
 const LOADING_MESSAGES = [
   "Analyzing your automation vulnerability...",
@@ -51,6 +61,7 @@ export default function Assessment() {
   const [open, setOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState("");
   const [jobTitle, setJobTitle] = useState("");
+  const [skillRatings, setSkillRatings] = useState<Record<string, number>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [loadingIdx, setLoadingIdx] = useState(0);
@@ -69,20 +80,42 @@ export default function Assessment() {
     }
   );
 
+  const { data: skillsData, isLoading: skillsLoading } = useGetSkillsByProgram(
+    selectedProgram,
+    {
+      query: {
+        queryKey: getGetSkillsByProgramQueryKey(selectedProgram),
+        enabled: !!selectedProgram,
+      },
+    }
+  );
+
   const { mutate: submitAssessment } = useSubmitAssessment();
 
   const programs: string[] = programsData?.programs ?? PROGRAMS_FALLBACK;
   const jobOptions: string[] = jobsData?.jobs ?? [];
+  const skills = skillsData?.skills ?? [];
+
+  const allSkillsRated = skills.length > 0 && skills.every((s) => skillRatings[s.id] !== undefined);
+  const canSubmit = !!selectedProgram && !!jobTitle && allSkillsRated;
+
+  const ratedCount = skills.filter((s) => skillRatings[s.id] !== undefined).length;
 
   const handleProgramSelect = (program: string) => {
     setSelectedProgram(program);
     setJobTitle("");
+    setSkillRatings({});
     setOpen(false);
     setError("");
   };
 
+  const handleSkillRate = (skillId: string, rating: number) => {
+    setSkillRatings((prev) => ({ ...prev, [skillId]: rating }));
+    setError("");
+  };
+
   const handleSubmit = () => {
-    if (!selectedProgram || !jobTitle) return;
+    if (!canSubmit) return;
     setIsSubmitting(true);
     setError("");
 
@@ -95,7 +128,7 @@ export default function Assessment() {
         data: {
           degree_program: selectedProgram,
           job_title: jobTitle,
-          skills: {},
+          skills: skillRatings,
         },
       },
       {
@@ -154,23 +187,41 @@ export default function Assessment() {
         </div>
       </header>
 
-      <div className="max-w-xl mx-auto px-6 py-16">
+      <div className="max-w-xl mx-auto px-6 py-12">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <Badge className="mb-4 text-xs tracking-wider uppercase">Automation Risk Assessment</Badge>
           <h1 className="text-3xl font-bold text-foreground mb-3">Predict Your Career Risk</h1>
-          <p className="text-muted-foreground leading-relaxed">
-            Select your degree program and current or target job title. ARAL will predict your automation
-            vulnerability using a Random Forest model trained on Filipino graduate respondents.
+          <p className="text-muted-foreground leading-relaxed text-sm">
+            Select your degree program, job title, and rate your proficiency in each CHED CMO skill.
+            ARAL uses a Random Forest model trained on Filipino graduate respondents.
           </p>
         </div>
 
+        {/* Progress indicator */}
+        {selectedProgram && (
+          <div className="flex items-center gap-2 mb-6">
+            {[
+              { n: 1, done: !!selectedProgram, label: "Program" },
+              { n: 2, done: !!jobTitle, label: "Job Title" },
+              { n: 3, done: allSkillsRated, label: `Skills (${ratedCount}/${skills.length})` },
+            ].map((step, i) => (
+              <div key={step.n} className="flex items-center gap-2 flex-1">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-colors ${step.done ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
+                  {step.done ? "✓" : step.n}
+                </div>
+                <span className={`text-xs truncate ${step.done ? "text-foreground font-medium" : "text-muted-foreground"}`}>{step.label}</span>
+                {i < 2 && <div className={`h-0.5 flex-1 rounded transition-colors ${step.done ? "bg-primary" : "bg-border"}`} />}
+              </div>
+            ))}
+          </div>
+        )}
+
         <Card className="shadow-sm">
-          <CardHeader>
+          <CardHeader className="pb-4">
             <CardTitle className="text-lg">Your Academic Profile</CardTitle>
             <CardDescription>
-              Skills and task data are derived from your program's CHED CMO curriculum standards and
-              typical occupational profiles — no additional input required.
+              Rate your skill proficiency based on your CHED CMO curriculum — this personalizes your vulnerability score.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -182,7 +233,7 @@ export default function Assessment() {
               </div>
             )}
 
-            {/* Step 1 — Program */}
+            {/* ── Step 1: Degree Program ── */}
             <div className="space-y-2">
               <div className="flex items-center gap-2 mb-1">
                 <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold flex-shrink-0">1</span>
@@ -202,12 +253,7 @@ export default function Assessment() {
                     }`}
                   >
                     <span>{selectedProgram || "Search or select your degree program..."}</span>
-                    <svg
-                      className={`w-4 h-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className={`w-4 h-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
@@ -225,16 +271,8 @@ export default function Assessment() {
                             onSelect={() => handleProgramSelect(program)}
                             className="py-3 cursor-pointer"
                           >
-                            <div
-                              className={`mr-3 w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                                selectedProgram === program
-                                  ? "border-primary bg-primary"
-                                  : "border-muted-foreground/40"
-                              }`}
-                            >
-                              {selectedProgram === program && (
-                                <div className="w-2 h-2 rounded-full bg-white" />
-                              )}
+                            <div className={`mr-3 w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${selectedProgram === program ? "border-primary bg-primary" : "border-muted-foreground/40"}`}>
+                              {selectedProgram === program && <div className="w-2 h-2 rounded-full bg-white" />}
                             </div>
                             {program}
                           </CommandItem>
@@ -244,17 +282,12 @@ export default function Assessment() {
                   </Command>
                 </PopoverContent>
               </Popover>
-              {selectedProgram && (
-                <p className="text-xs text-muted-foreground">
-                  Skills profile sourced from CHED CMO for {selectedProgram}.
-                </p>
-              )}
             </div>
 
-            {/* Step 2 — Job Title Dropdown */}
+            {/* ── Step 2: Job Title ── */}
             <div className="space-y-2">
               <div className="flex items-center gap-2 mb-1">
-                <span className={`w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold flex-shrink-0 ${selectedProgram ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>2</span>
+                <span className={`w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold flex-shrink-0 transition-colors ${selectedProgram ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>2</span>
                 <Label className={`text-sm font-medium ${!selectedProgram ? "text-muted-foreground" : ""}`}>
                   Current or Target Job Title <span className="text-destructive">*</span>
                 </Label>
@@ -271,44 +304,112 @@ export default function Assessment() {
                 </div>
               ) : (
                 <Select value={jobTitle} onValueChange={(v) => { setJobTitle(v); setError(""); }}>
-                  <SelectTrigger
-                    className={`h-11 text-sm border-2 transition-all ${
-                      jobTitle
-                        ? "border-primary/40 bg-primary/5"
-                        : "border-border hover:border-primary/30"
-                    }`}
-                  >
+                  <SelectTrigger className={`h-11 text-sm border-2 transition-all ${jobTitle ? "border-primary/40 bg-primary/5" : "border-border hover:border-primary/30"}`}>
                     <SelectValue placeholder="Select a job title..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {jobOptions.length === 0 ? (
-                      <div className="py-3 px-4 text-sm text-muted-foreground">No job titles found.</div>
-                    ) : (
-                      jobOptions.map((job) => (
-                        <SelectItem key={job} value={job} className="py-2.5 cursor-pointer">
-                          {job}
-                        </SelectItem>
-                      ))
-                    )}
+                    {jobOptions.map((job) => (
+                      <SelectItem key={job} value={job} className="py-2.5 cursor-pointer">
+                        {job}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               )}
+            </div>
 
-              {jobTitle && (
-                <p className="text-xs text-muted-foreground">
-                  Task distribution for <span className="font-medium text-foreground">{jobTitle}</span> will be used in the assessment.
-                </p>
+            {/* ── Step 3: Skills Proficiency ── */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 mb-1">
+                <span className={`w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold flex-shrink-0 transition-colors ${jobTitle ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>3</span>
+                <Label className={`text-sm font-medium ${!jobTitle ? "text-muted-foreground" : ""}`}>
+                  Skill Proficiency — CHED CMO Standards <span className="text-destructive">*</span>
+                </Label>
+                {jobTitle && skills.length > 0 && (
+                  <span className="ml-auto text-xs text-muted-foreground">{ratedCount}/{skills.length} rated</span>
+                )}
+              </div>
+
+              {!jobTitle ? (
+                <div className="p-4 rounded-lg border-2 border-dashed border-border bg-muted/30 text-center">
+                  <span className="text-sm text-muted-foreground">Select your job title to unlock skill rating</span>
+                </div>
+              ) : skillsLoading ? (
+                <div className="p-4 rounded-lg border border-border bg-muted/30 flex items-center gap-3">
+                  <Spinner className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">Loading CHED CMO skills...</span>
+                </div>
+              ) : (
+                <>
+                  {/* Proficiency legend */}
+                  <div className="flex flex-wrap gap-1.5 mb-3 p-3 bg-muted/30 rounded-lg">
+                    {[1,2,3,4,5].map((n) => (
+                      <div key={n} className={`text-xs px-2 py-0.5 rounded border ${PROFICIENCY_LABELS[n].color}`}>
+                        {n} — {PROFICIENCY_LABELS[n].label}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Skill rows */}
+                  <div className="space-y-3">
+                    {skills.map((skill) => {
+                      const rated = skillRatings[skill.id];
+                      return (
+                        <div
+                          key={skill.id}
+                          className={`p-3 rounded-lg border transition-colors ${rated !== undefined ? "border-primary/30 bg-primary/[0.02]" : "border-border"}`}
+                        >
+                          <div className="flex items-start justify-between gap-3 mb-2">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-foreground leading-snug">{skill.label}</p>
+                              {skill.description && (
+                                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{skill.description}</p>
+                              )}
+                            </div>
+                            {rated !== undefined && (
+                              <span className={`text-xs px-2 py-0.5 rounded border whitespace-nowrap flex-shrink-0 ${PROFICIENCY_LABELS[rated].color}`}>
+                                {rated} — {PROFICIENCY_LABELS[rated].label}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex gap-1.5">
+                            {[1,2,3,4,5].map((n) => (
+                              <button
+                                key={n}
+                                onClick={() => handleSkillRate(skill.id, n)}
+                                className={`flex-1 h-9 text-sm font-semibold rounded-md border-2 transition-all ${
+                                  rated === n
+                                    ? `${PROFICIENCY_LABELS[n].color} border-current scale-95 shadow-sm`
+                                    : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                                }`}
+                              >
+                                {n}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
               )}
             </div>
 
+            {/* Submit */}
             <div className="pt-2">
               <Button
                 onClick={handleSubmit}
-                disabled={!selectedProgram || !jobTitle}
+                disabled={!canSubmit}
                 className="w-full h-12 text-base font-semibold"
                 size="lg"
               >
-                Analyze My Automation Risk
+                {!selectedProgram
+                  ? "Select a Degree Program to Start"
+                  : !jobTitle
+                  ? "Select a Job Title to Continue"
+                  : !allSkillsRated
+                  ? `Rate All Skills to Continue (${ratedCount}/${skills.length})`
+                  : "Analyze My Automation Risk →"}
               </Button>
             </div>
 
