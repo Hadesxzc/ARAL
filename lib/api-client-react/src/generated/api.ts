@@ -21,6 +21,7 @@ import type {
   AssessmentResult,
   GlobalStatsResponse,
   HealthStatus,
+  JobsResponse,
   ProgramSummaryResponse,
   ProgramsResponse,
   SkillsResponse,
@@ -114,7 +115,7 @@ export function useHealthCheck<
 }
 
 /**
- * @summary Get all degree programs
+ * @summary Get all 30 degree programs
  */
 export const getGetProgramsUrl = () => {
   return `/api/programs`;
@@ -165,7 +166,7 @@ export type GetProgramsQueryResult = NonNullable<
 export type GetProgramsQueryError = ErrorType<unknown>;
 
 /**
- * @summary Get all degree programs
+ * @summary Get all 30 degree programs
  */
 
 export function useGetPrograms<
@@ -189,7 +190,7 @@ export function useGetPrograms<
 }
 
 /**
- * @summary Get skills checklist for a degree program
+ * @summary Get CHED CMO skills checklist for a degree program
  */
 export const getGetSkillsByProgramUrl = (program: string) => {
   return `/api/skills/${program}`;
@@ -251,7 +252,7 @@ export type GetSkillsByProgramQueryResult = NonNullable<
 export type GetSkillsByProgramQueryError = ErrorType<unknown>;
 
 /**
- * @summary Get skills checklist for a degree program
+ * @summary Get CHED CMO skills checklist for a degree program
  */
 
 export function useGetSkillsByProgram<
@@ -269,6 +270,94 @@ export function useGetSkillsByProgram<
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetSkillsByProgramQueryOptions(program, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Get job titles for a degree program
+ */
+export const getGetJobsByProgramUrl = (program: string) => {
+  return `/api/jobs/${program}`;
+};
+
+export const getJobsByProgram = async (
+  program: string,
+  options?: RequestInit,
+): Promise<JobsResponse> => {
+  return customFetch<JobsResponse>(getGetJobsByProgramUrl(program), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetJobsByProgramQueryKey = (program: string) => {
+  return [`/api/jobs/${program}`] as const;
+};
+
+export const getGetJobsByProgramQueryOptions = <
+  TData = Awaited<ReturnType<typeof getJobsByProgram>>,
+  TError = ErrorType<unknown>,
+>(
+  program: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getJobsByProgram>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetJobsByProgramQueryKey(program);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getJobsByProgram>>
+  > = ({ signal }) => getJobsByProgram(program, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!program,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getJobsByProgram>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetJobsByProgramQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getJobsByProgram>>
+>;
+export type GetJobsByProgramQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get job titles for a degree program
+ */
+
+export function useGetJobsByProgram<
+  TData = Awaited<ReturnType<typeof getJobsByProgram>>,
+  TError = ErrorType<unknown>,
+>(
+  program: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getJobsByProgram>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetJobsByProgramQueryOptions(program, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
@@ -364,7 +453,7 @@ export const useSubmitAssessment = <
 };
 
 /**
- * @summary Get aggregated SHAP findings per degree program (research dashboard)
+ * @summary Get aggregated SHAP findings per degree program
  */
 export const getGetProgramSummaryUrl = () => {
   return `/api/analytics/program-summary`;
@@ -415,7 +504,7 @@ export type GetProgramSummaryQueryResult = NonNullable<
 export type GetProgramSummaryQueryError = ErrorType<unknown>;
 
 /**
- * @summary Get aggregated SHAP findings per degree program (research dashboard)
+ * @summary Get aggregated SHAP findings per degree program
  */
 
 export function useGetProgramSummary<
@@ -514,7 +603,7 @@ export function useGetGlobalStats<
 }
 
 /**
- * @summary Submit System Usability Scale questionnaire responses
+ * @summary Submit System Usability Scale questionnaire
  */
 export const getSubmitSusUrl = () => {
   return `/api/sus`;
@@ -577,7 +666,7 @@ export type SubmitSusMutationBody = BodyType<SusInput>;
 export type SubmitSusMutationError = ErrorType<unknown>;
 
 /**
- * @summary Submit System Usability Scale questionnaire responses
+ * @summary Submit System Usability Scale questionnaire
  */
 export const useSubmitSus = <
   TError = ErrorType<unknown>,
@@ -600,7 +689,7 @@ export const useSubmitSus = <
 };
 
 /**
- * @summary Get aggregated SUS results (admin)
+ * @summary Get aggregated SUS results
  */
 export const getGetSusResultsUrl = () => {
   return `/api/sus/results`;
@@ -651,7 +740,7 @@ export type GetSusResultsQueryResult = NonNullable<
 export type GetSusResultsQueryError = ErrorType<unknown>;
 
 /**
- * @summary Get aggregated SUS results (admin)
+ * @summary Get aggregated SUS results
  */
 
 export function useGetSusResults<

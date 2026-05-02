@@ -18,6 +18,7 @@ export * from "./globalStatsResponse";
 export * from "./globalStatsResponseProgramAverages";
 export * from "./globalStatsResponseScoreDistributionItem";
 export * from "./healthStatus";
+export * from "./jobsResponse";
 export * from "./programsResponse";
 export * from "./programSummaryItem";
 export * from "./programSummaryResponse";

@@ -6,4 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
+/**
+ * Skill proficiency ratings (1=None, 2=Beginner, 3=Intermediate, 4=Proficient, 5=Expert)
+ */
 export type AssessmentInputSkills = { [key: string]: number };

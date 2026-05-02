@@ -13,4 +13,5 @@ export interface SkillGap {
   in_ched_cmo: boolean;
   gap_type: SkillGapGapType;
   impact_score: number;
+  user_proficiency?: number;
 }

@@ -34,7 +34,7 @@ paths:
     get:
       operationId: getPrograms
       tags: [programs]
-      summary: Get all degree programs
+      summary: Get all 30 degree programs
       responses:
         "200":
           description: List of covered degree programs
@@ -47,7 +47,7 @@ paths:
     get:
       operationId: getSkillsByProgram
       tags: [programs]
-      summary: Get skills checklist for a degree program
+      summary: Get CHED CMO skills checklist for a degree program
       parameters:
         - name: program
           in: path
@@ -56,11 +56,30 @@ paths:
             type: string
       responses:
         "200":
-          description: Skills checklist for the program
+          description: Skills checklist with CHED CMO reference
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SkillsResponse"
+
+  /jobs/{program}:
+    get:
+      operationId: getJobsByProgram
+      tags: [programs]
+      summary: Get job titles for a degree program
+      parameters:
+        - name: program
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Job titles for the program
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobsResponse"
 
   /assess:
     post:
@@ -75,7 +94,7 @@ paths:
               $ref: "#/components/schemas/AssessmentInput"
       responses:
         "200":
-          description: Full assessment results with vulnerability score, SHAP explanation, skill gaps, and course recommendations
+          description: Full assessment results
           content:
             application/json:
               schema:
@@ -85,7 +104,7 @@ paths:
     get:
       operationId: getProgramSummary
       tags: [analytics]
-      summary: Get aggregated SHAP findings per degree program (research dashboard)
+      summary: Get aggregated SHAP findings per degree program
       responses:
         "200":
           description: Program analytics summary
@@ -111,7 +130,7 @@ paths:
     post:
       operationId: submitSus
       tags: [assessment]
-      summary: Submit System Usability Scale questionnaire responses
+      summary: Submit System Usability Scale questionnaire
       requestBody:
         required: true
         content:
@@ -130,7 +149,7 @@ paths:
     get:
       operationId: getSusResults
       tags: [analytics]
-      summary: Get aggregated SUS results (admin)
+      summary: Get aggregated SUS results
       responses:
         "200":
           description: SUS results summary
@@ -146,8 +165,7 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
     ProgramsResponse:
       type: object
@@ -156,8 +174,7 @@ components:
           type: array
           items:
             type: string
-      required:
-        - programs
+      required: [programs]
 
     Skill:
       type: object
@@ -170,10 +187,7 @@ components:
           type: string
         description:
           type: string
-      required:
-        - id
-        - label
-        - source
+      required: [id, label, source]
 
     SkillsResponse:
       type: object
@@ -186,10 +200,18 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Skill"
-      required:
-        - program
-        - cmo_reference
-        - skills
+      required: [program, cmo_reference, skills]
+
+    JobsResponse:
+      type: object
+      properties:
+        program:
+          type: string
+        jobs:
+          type: array
+          items:
+            type: string
+      required: [program, jobs]
 
     AssessmentInput:
       type: object
@@ -202,6 +224,9 @@ components:
           type: object
           additionalProperties:
             type: integer
+            minimum: 1
+            maximum: 5
+          description: "Skill proficiency ratings (1=None, 2=Beginner, 3=Intermediate, 4=Proficient, 5=Expert)"
         task_distribution:
           type: object
           additionalProperties:
@@ -223,11 +248,7 @@ components:
         direction:
           type: string
           enum: [increases_risk, reduces_risk]
-      required:
-        - skill
-        - skill_label
-        - contribution
-        - direction
+      required: [skill, skill_label, contribution, direction]
 
     SkillGap:
       type: object
@@ -243,12 +264,9 @@ components:
           enum: [implementation, design]
         impact_score:
           type: number
-      required:
-        - skill_id
-        - skill_label
-        - in_ched_cmo
-        - gap_type
-        - impact_score
+        user_proficiency:
+          type: integer
+      required: [skill_id, skill_label, in_ched_cmo, gap_type, impact_score]
 
     CourseRecommendation:
       type: object
@@ -265,12 +283,7 @@ components:
           type: boolean
         reason:
           type: string
-      required:
-        - skill
-        - course_title
-        - platform
-        - url
-        - is_free
+      required: [skill, course_title, platform, url, is_free]
 
     AssessmentResult:
       type: object
@@ -299,9 +312,7 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ShapFactor"
-          required:
-            - top_risk_factors
-            - top_protective_factors
+          required: [top_risk_factors, top_protective_factors]
         skill_gaps:
           type: array
           items:
@@ -347,13 +358,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/SkillGap"
-      required:
-        - program
-        - mean_vulnerability
-        - respondent_count
-        - top_risk_skills
-        - top_protective_skills
-        - curriculum_gaps
+      required: [program, mean_vulnerability, respondent_count, top_risk_skills, top_protective_skills, curriculum_gaps]
 
     ProgramSummaryResponse:
       type: object
@@ -362,8 +367,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ProgramSummaryItem"
-      required:
-        - programs
+      required: [programs]
 
     GlobalStatsResponse:
       type: object
@@ -381,9 +385,7 @@ components:
                 type: string
               count:
                 type: integer
-            required:
-              - range
-              - count
+            required: [range, count]
         program_averages:
           type: object
           additionalProperties:
@@ -415,8 +417,7 @@ components:
           maxItems: 10
         degree_program:
           type: string
-      required:
-        - responses
+      required: [responses]
 
     SusResult:
       type: object
@@ -427,10 +428,7 @@ components:
           type: string
         grade:
           type: string
-      required:
-        - sus_score
-        - interpretation
-        - grade
+      required: [sus_score, interpretation, grade]
 
     SusResultsSummary:
       type: object
@@ -449,9 +447,4 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/SusResult"
-      required:
-        - total_responses
-        - mean_sus_score
-        - interpretation
-        - score_by_program
-        - responses
+      required: [total_responses, mean_sus_score, interpretation, score_by_program, responses]

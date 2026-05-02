@@ -11,6 +11,7 @@ import type { AssessmentInputTaskDistribution } from "./assessmentInputTaskDistr
 export interface AssessmentInput {
   degree_program: string;
   job_title: string;
+  /** Skill proficiency ratings (1=None, 2=Beginner, 3=Intermediate, 4=Proficient, 5=Expert) */
   skills: AssessmentInputSkills;
   task_distribution?: AssessmentInputTaskDistribution;
 }

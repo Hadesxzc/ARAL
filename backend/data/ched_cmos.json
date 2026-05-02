@@ -1,92 +1,392 @@
 {
   "BS Accountancy": {
-    "cmo_reference": "CMO No. 3 s. 2007 as amended",
+    "cmo_reference": "CMO No. 3 s. 2007",
     "skills": [
-      {"id": "skill_financial_statements", "label": "Financial Statement Preparation", "source": "CMO No. 3 s. 2007", "description": "Prepare financial statements in accordance with PFRS"},
-      {"id": "skill_tax_computation", "label": "Tax Computation and Filing", "source": "CMO No. 3 s. 2007", "description": "Compute and file tax returns under Philippine tax law"},
-      {"id": "skill_auditing", "label": "Auditing Procedures", "source": "CMO No. 3 s. 2007", "description": "Apply auditing standards in manual and computerized environments"},
-      {"id": "skill_cost_accounting", "label": "Cost Accounting", "source": "CMO No. 3 s. 2007", "description": "Apply cost accounting methods to business decisions"},
-      {"id": "skill_bookkeeping", "label": "Bookkeeping and Recording", "source": "CMO No. 3 s. 2007", "description": "Maintain books of accounts and financial records"},
-      {"id": "skill_business_law", "label": "Business Law and Ethics", "source": "CMO No. 3 s. 2007", "description": "Apply legal and ethical principles in accounting practice"},
-      {"id": "skill_management_accounting", "label": "Management Accounting", "source": "CMO No. 3 s. 2007", "description": "Use accounting information for managerial decision-making"},
-      {"id": "skill_pfrs", "label": "Philippine Financial Reporting Standards", "source": "CMO No. 3 s. 2007", "description": "Apply PFRS in financial reporting"},
-      {"id": "skill_computerized_accounting", "label": "Computerized Accounting Systems", "source": "CMO No. 3 s. 2007", "description": "Use accounting software and computerized systems"},
-      {"id": "skill_data_interpretation", "label": "Data Analysis and Interpretation", "source": "CMO No. 3 s. 2007", "description": "Analyze and interpret financial and non-financial data"}
+      {"id": "skill_fin_accounting", "label": "Financial Accounting", "source": "CMO No. 3 s. 2007", "description": "Prepare financial statements aligned with PFRS/GAAP"},
+      {"id": "skill_taxation", "label": "Philippine Taxation", "source": "CMO No. 3 s. 2007", "description": "Compute and file tax returns under NIRC and BIR regulations"},
+      {"id": "skill_auditing", "label": "Auditing and Assurance", "source": "CMO No. 3 s. 2007", "description": "Apply PSA/ISA auditing standards in assurance engagements"},
+      {"id": "skill_cost_mgmt_acctg", "label": "Cost and Management Accounting", "source": "CMO No. 3 s. 2007", "description": "Use cost data for planning, control, and decision-making"},
+      {"id": "skill_bookkeeping", "label": "Bookkeeping and Recording", "source": "CMO No. 3 s. 2007", "description": "Maintain journals, ledgers, and books of accounts"},
+      {"id": "skill_business_law", "label": "Business Law and Taxation Ethics", "source": "CMO No. 3 s. 2007", "description": "Apply legal and ethical principles in accounting practice"},
+      {"id": "skill_pfrs_gaap", "label": "PFRS / IFRS Application", "source": "CMO No. 3 s. 2007", "description": "Apply Philippine Financial Reporting Standards in reporting"},
+      {"id": "skill_data_analytics_acctg", "label": "Data Analytics for Accountants", "source": "CMO No. 3 s. 2007", "description": "Use data tools to analyze and interpret financial data"}
     ]
   },
   "BS Business Administration": {
     "cmo_reference": "CMO No. 17 s. 2017",
     "skills": [
-      {"id": "skill_marketing_principles", "label": "Marketing Principles and Strategies", "source": "CMO No. 17 s. 2017", "description": "Apply core marketing concepts and strategic planning"},
-      {"id": "skill_human_resource_mgmt", "label": "Human Resource Management", "source": "CMO No. 17 s. 2017", "description": "Manage human resources effectively"},
-      {"id": "skill_operations_management", "label": "Operations Management", "source": "CMO No. 17 s. 2017", "description": "Optimize business operations and supply chains"},
-      {"id": "skill_business_communication", "label": "Business Communication", "source": "CMO No. 17 s. 2017", "description": "Communicate effectively in business contexts"},
-      {"id": "skill_financial_management", "label": "Financial Management", "source": "CMO No. 17 s. 2017", "description": "Manage organizational finances and investments"},
-      {"id": "skill_entrepreneurship", "label": "Entrepreneurship and Innovation", "source": "CMO No. 17 s. 2017", "description": "Develop and launch entrepreneurial ventures"},
-      {"id": "skill_business_ethics", "label": "Business Ethics and Corporate Governance", "source": "CMO No. 17 s. 2017", "description": "Apply ethical principles in business decisions"},
-      {"id": "skill_strategic_management", "label": "Strategic Management", "source": "CMO No. 17 s. 2017", "description": "Formulate and implement business strategies"},
-      {"id": "skill_consumer_behavior", "label": "Consumer Behavior Analysis", "source": "CMO No. 17 s. 2017", "description": "Analyze consumer decision-making processes"},
-      {"id": "skill_business_research", "label": "Business Research Methods", "source": "CMO No. 17 s. 2017", "description": "Conduct and evaluate business research"}
+      {"id": "skill_marketing", "label": "Marketing Management", "source": "CMO No. 17 s. 2017", "description": "Plan and execute marketing strategies and campaigns"},
+      {"id": "skill_hrm", "label": "Human Resource Management", "source": "CMO No. 17 s. 2017", "description": "Manage recruitment, training, compensation, and labor relations"},
+      {"id": "skill_operations_mgmt", "label": "Operations Management", "source": "CMO No. 17 s. 2017", "description": "Optimize business processes and supply chain operations"},
+      {"id": "skill_business_comm", "label": "Business Communication", "source": "CMO No. 17 s. 2017", "description": "Communicate effectively in written and verbal business contexts"},
+      {"id": "skill_financial_mgmt", "label": "Financial Management", "source": "CMO No. 17 s. 2017", "description": "Manage organizational finances, investments, and capital structure"},
+      {"id": "skill_entrepreneurship", "label": "Entrepreneurship and Innovation", "source": "CMO No. 17 s. 2017", "description": "Develop and launch entrepreneurial ventures and innovations"},
+      {"id": "skill_strategic_mgmt", "label": "Strategic Management", "source": "CMO No. 17 s. 2017", "description": "Formulate, implement, and evaluate business strategies"},
+      {"id": "skill_biz_research", "label": "Business Research Methods", "source": "CMO No. 17 s. 2017", "description": "Design and conduct quantitative and qualitative business research"}
     ]
   },
   "BS Information Technology": {
     "cmo_reference": "CMO No. 25 s. 2015",
     "skills": [
-      {"id": "skill_programming", "label": "Programming (any language)", "source": "CMO No. 25 s. 2015", "description": "Write and debug programs in at least one programming language"},
-      {"id": "skill_database_management", "label": "Database Management", "source": "CMO No. 25 s. 2015", "description": "Design, implement, and manage relational databases"},
-      {"id": "skill_network_administration", "label": "Network Administration", "source": "CMO No. 25 s. 2015", "description": "Configure and maintain computer networks"},
-      {"id": "skill_web_development", "label": "Web Development", "source": "CMO No. 25 s. 2015", "description": "Build and deploy web applications"},
-      {"id": "skill_systems_analysis", "label": "Systems Analysis and Design", "source": "CMO No. 25 s. 2015", "description": "Analyze and design information systems"},
-      {"id": "skill_cybersecurity", "label": "Cybersecurity Fundamentals", "source": "CMO No. 25 s. 2015", "description": "Identify and mitigate cybersecurity threats"},
-      {"id": "skill_technical_documentation", "label": "Technical Documentation", "source": "CMO No. 25 s. 2015", "description": "Create clear technical manuals and documentation"},
-      {"id": "skill_software_testing", "label": "Software Testing and QA", "source": "CMO No. 25 s. 2015", "description": "Test software for quality and correctness"},
-      {"id": "skill_cloud_computing", "label": "Cloud Computing Basics", "source": "CMO No. 25 s. 2015", "description": "Deploy and manage cloud-based services"},
-      {"id": "skill_it_project_management", "label": "IT Project Management", "source": "CMO No. 25 s. 2015", "description": "Plan and manage IT projects"}
+      {"id": "skill_programming_it", "label": "Programming and Software Development", "source": "CMO No. 25 s. 2015", "description": "Write and debug programs in at least one programming language"},
+      {"id": "skill_database", "label": "Database Management", "source": "CMO No. 25 s. 2015", "description": "Design, implement, and manage relational databases"},
+      {"id": "skill_networking", "label": "Network Administration", "source": "CMO No. 25 s. 2015", "description": "Configure and maintain computer networks"},
+      {"id": "skill_web_dev", "label": "Web Development", "source": "CMO No. 25 s. 2015", "description": "Build and deploy responsive web applications"},
+      {"id": "skill_cybersecurity_it", "label": "Cybersecurity", "source": "CMO No. 25 s. 2015", "description": "Identify, assess, and mitigate cybersecurity threats"},
+      {"id": "skill_cloud", "label": "Cloud Computing", "source": "CMO No. 25 s. 2015", "description": "Deploy and manage cloud-based infrastructure and services"},
+      {"id": "skill_systems_analysis", "label": "Systems Analysis and Design", "source": "CMO No. 25 s. 2015", "description": "Analyze business needs and design information systems"},
+      {"id": "skill_it_project_mgmt", "label": "IT Project Management", "source": "CMO No. 25 s. 2015", "description": "Plan and manage IT projects using agile or waterfall methods"}
     ]
   },
   "BS Computer Science": {
     "cmo_reference": "CMO No. 25 s. 2015",
     "skills": [
-      {"id": "skill_algorithms_ds", "label": "Algorithms and Data Structures", "source": "CMO No. 25 s. 2015", "description": "Design and analyze efficient algorithms"},
-      {"id": "skill_software_engineering", "label": "Software Engineering", "source": "CMO No. 25 s. 2015", "description": "Apply software engineering methodologies"},
-      {"id": "skill_operating_systems", "label": "Operating Systems", "source": "CMO No. 25 s. 2015", "description": "Understand OS principles and system programming"},
-      {"id": "skill_computer_architecture", "label": "Computer Architecture", "source": "CMO No. 25 s. 2015", "description": "Understand computer hardware and architecture"},
-      {"id": "skill_machine_learning_basics", "label": "Machine Learning Fundamentals", "source": "CMO No. 25 s. 2015", "description": "Apply machine learning algorithms to problems"},
-      {"id": "skill_theory_of_computation", "label": "Theory of Computation", "source": "CMO No. 25 s. 2015", "description": "Understand formal languages and computability"},
-      {"id": "skill_mobile_development", "label": "Mobile Application Development", "source": "CMO No. 25 s. 2015", "description": "Build mobile apps for iOS or Android"},
-      {"id": "skill_parallel_computing", "label": "Parallel and Distributed Computing", "source": "CMO No. 25 s. 2015", "description": "Design parallel and distributed systems"},
-      {"id": "skill_research_methods_cs", "label": "Research Methods in CS", "source": "CMO No. 25 s. 2015", "description": "Conduct and evaluate CS research"},
-      {"id": "skill_capstone_systems", "label": "Capstone System Development", "source": "CMO No. 25 s. 2015", "description": "Design and build a full capstone system"}
+      {"id": "skill_algorithms", "label": "Algorithms and Data Structures", "source": "CMO No. 25 s. 2015", "description": "Design and analyze efficient algorithms and data structures"},
+      {"id": "skill_software_eng", "label": "Software Engineering", "source": "CMO No. 25 s. 2015", "description": "Apply software development methodologies and design patterns"},
+      {"id": "skill_ml_ai", "label": "Machine Learning and AI", "source": "CMO No. 25 s. 2015", "description": "Build and evaluate machine learning models and AI systems"},
+      {"id": "skill_mobile_dev", "label": "Mobile Application Development", "source": "CMO No. 25 s. 2015", "description": "Develop mobile apps for Android and/or iOS platforms"},
+      {"id": "skill_os", "label": "Operating Systems", "source": "CMO No. 25 s. 2015", "description": "Understand OS principles, system calls, and concurrency"},
+      {"id": "skill_computer_arch", "label": "Computer Architecture", "source": "CMO No. 25 s. 2015", "description": "Understand hardware organization and computer architecture"},
+      {"id": "skill_research_cs", "label": "Research Methods in CS", "source": "CMO No. 25 s. 2015", "description": "Conduct and evaluate computing research"},
+      {"id": "skill_fullstack", "label": "Full Stack Development", "source": "CMO No. 25 s. 2015", "description": "Build end-to-end web applications (frontend + backend)"}
     ]
   },
   "Bachelor of Elementary Education": {
     "cmo_reference": "CMO No. 74 s. 2017",
     "skills": [
-      {"id": "skill_lesson_planning", "label": "Lesson Planning and Design", "source": "CMO No. 74 s. 2017", "description": "Create effective lesson plans aligned with curriculum"},
-      {"id": "skill_classroom_management", "label": "Classroom Management", "source": "CMO No. 74 s. 2017", "description": "Manage classroom behavior and environment"},
-      {"id": "skill_curriculum_development", "label": "Curriculum Development", "source": "CMO No. 74 s. 2017", "description": "Design and evaluate educational curricula"},
-      {"id": "skill_educational_assessment", "label": "Educational Assessment and Evaluation", "source": "CMO No. 74 s. 2017", "description": "Assess and evaluate student learning"},
-      {"id": "skill_child_development", "label": "Child and Adolescent Development", "source": "CMO No. 74 s. 2017", "description": "Understand developmental stages of learners"},
-      {"id": "skill_inclusive_education", "label": "Inclusive Education", "source": "CMO No. 74 s. 2017", "description": "Teach learners with diverse needs"},
-      {"id": "skill_teaching_strategies", "label": "Differentiated Teaching Strategies", "source": "CMO No. 74 s. 2017", "description": "Apply varied teaching methods"},
-      {"id": "skill_educational_technology", "label": "Educational Technology Integration", "source": "CMO No. 74 s. 2017", "description": "Integrate technology into instruction"},
-      {"id": "skill_professional_ethics_ed", "label": "Professional Ethics in Education", "source": "CMO No. 74 s. 2017", "description": "Apply ethical standards in teaching practice"},
-      {"id": "skill_community_engagement", "label": "Community Engagement and Linkages", "source": "CMO No. 74 s. 2017", "description": "Build community partnerships for education"}
+      {"id": "skill_lesson_plan", "label": "Lesson Planning and Delivery", "source": "CMO No. 74 s. 2017", "description": "Create and deliver effective lesson plans aligned with K-12 curriculum"},
+      {"id": "skill_classroom_mgmt", "label": "Classroom Management", "source": "CMO No. 74 s. 2017", "description": "Maintain positive and productive classroom environments"},
+      {"id": "skill_curriculum_dev", "label": "Curriculum Development", "source": "CMO No. 74 s. 2017", "description": "Design, implement, and evaluate educational curricula"},
+      {"id": "skill_educ_assessment", "label": "Educational Assessment", "source": "CMO No. 74 s. 2017", "description": "Develop and use assessment tools to evaluate student learning"},
+      {"id": "skill_child_dev", "label": "Child Development", "source": "CMO No. 74 s. 2017", "description": "Understand developmental stages and needs of elementary learners"},
+      {"id": "skill_inclusive_educ", "label": "Inclusive Education", "source": "CMO No. 74 s. 2017", "description": "Teach learners with diverse needs and learning differences"},
+      {"id": "skill_edtech", "label": "Educational Technology Integration", "source": "CMO No. 74 s. 2017", "description": "Integrate ICT tools and digital resources in instruction"},
+      {"id": "skill_comm_engagement", "label": "Community Engagement", "source": "CMO No. 74 s. 2017", "description": "Build school-community partnerships to support learning"}
+    ]
+  },
+  "Bachelor of Secondary Education": {
+    "cmo_reference": "CMO No. 75 s. 2017",
+    "skills": [
+      {"id": "skill_subject_spec", "label": "Subject Area Specialization", "source": "CMO No. 75 s. 2017", "description": "Deep mastery of the content area assigned to teach"},
+      {"id": "skill_curriculum_sec", "label": "Curriculum Planning", "source": "CMO No. 75 s. 2017", "description": "Align lessons with DepEd competencies and K-12 curriculum"},
+      {"id": "skill_adolescent_psych", "label": "Adolescent Psychology", "source": "CMO No. 75 s. 2017", "description": "Understand the psychological development of adolescent learners"},
+      {"id": "skill_classroom_mgmt_sec", "label": "Classroom Management (Secondary)", "source": "CMO No. 75 s. 2017", "description": "Manage diverse secondary school classroom environments"},
+      {"id": "skill_edtech_sec", "label": "Educational Technology", "source": "CMO No. 75 s. 2017", "description": "Use technology to enhance secondary teaching and learning"},
+      {"id": "skill_assessment_eval", "label": "Assessment and Evaluation", "source": "CMO No. 75 s. 2017", "description": "Design valid and reliable assessments for secondary learners"},
+      {"id": "skill_research_educ", "label": "Action Research in Education", "source": "CMO No. 75 s. 2017", "description": "Conduct classroom-based research to improve teaching practice"},
+      {"id": "skill_inclusive_educ_sec", "label": "Inclusive Education (Secondary)", "source": "CMO No. 75 s. 2017", "description": "Support students with diverse learning needs in secondary school"}
     ]
   },
   "BS Nursing": {
     "cmo_reference": "CMO No. 14 s. 2009",
     "skills": [
-      {"id": "skill_patient_assessment", "label": "Patient Health Assessment", "source": "CMO No. 14 s. 2009", "description": "Conduct comprehensive health assessments"},
-      {"id": "skill_medication_administration", "label": "Medication Administration", "source": "CMO No. 14 s. 2009", "description": "Administer medications safely and accurately"},
-      {"id": "skill_health_education", "label": "Health Education and Promotion", "source": "CMO No. 14 s. 2009", "description": "Educate patients and communities on health"},
-      {"id": "skill_nursing_care_planning", "label": "Nursing Care Planning", "source": "CMO No. 14 s. 2009", "description": "Develop individualized nursing care plans"},
-      {"id": "skill_infection_control", "label": "Infection Control and Prevention", "source": "CMO No. 14 s. 2009", "description": "Apply infection prevention protocols"},
-      {"id": "skill_emergency_care", "label": "Emergency and Critical Care", "source": "CMO No. 14 s. 2009", "description": "Provide emergency and critical patient care"},
-      {"id": "skill_maternal_child_nursing", "label": "Maternal and Child Nursing", "source": "CMO No. 14 s. 2009", "description": "Care for mothers and children"},
-      {"id": "skill_community_health_nursing", "label": "Community Health Nursing", "source": "CMO No. 14 s. 2009", "description": "Deliver community-based nursing care"},
-      {"id": "skill_mental_health_nursing", "label": "Mental Health Nursing", "source": "CMO No. 14 s. 2009", "description": "Provide mental health nursing care"},
-      {"id": "skill_nursing_research", "label": "Nursing Research", "source": "CMO No. 14 s. 2009", "description": "Apply research evidence to nursing practice"}
+      {"id": "skill_patient_assess", "label": "Patient Health Assessment", "source": "CMO No. 14 s. 2009", "description": "Conduct comprehensive patient health assessments"},
+      {"id": "skill_medication_admin", "label": "Medication Administration", "source": "CMO No. 14 s. 2009", "description": "Administer medications safely using the 10 rights"},
+      {"id": "skill_nursing_care_plan", "label": "Nursing Care Planning", "source": "CMO No. 14 s. 2009", "description": "Develop individualized, evidence-based nursing care plans"},
+      {"id": "skill_infection_ctrl", "label": "Infection Control and Prevention", "source": "CMO No. 14 s. 2009", "description": "Apply IPC protocols to prevent healthcare-associated infections"},
+      {"id": "skill_emergency_nursing", "label": "Emergency and Critical Care", "source": "CMO No. 14 s. 2009", "description": "Provide emergency care for critically ill patients"},
+      {"id": "skill_community_nursing", "label": "Community Health Nursing", "source": "CMO No. 14 s. 2009", "description": "Deliver community-based and public health nursing care"},
+      {"id": "skill_health_educ", "label": "Health Education and Promotion", "source": "CMO No. 14 s. 2009", "description": "Educate patients and communities on health and wellness"},
+      {"id": "skill_nursing_research", "label": "Nursing Research and EBP", "source": "CMO No. 14 s. 2009", "description": "Apply evidence-based practice principles to nursing care"}
+    ]
+  },
+  "BS Psychology": {
+    "cmo_reference": "CMO No. 34 s. 2017",
+    "skills": [
+      {"id": "skill_psych_assessment", "label": "Psychological Assessment", "source": "CMO No. 34 s. 2017", "description": "Administer and interpret psychological tests and assessments"},
+      {"id": "skill_counseling", "label": "Counseling Skills", "source": "CMO No. 34 s. 2017", "description": "Apply basic counseling theories and techniques"},
+      {"id": "skill_research_psych", "label": "Research Methods in Psychology", "source": "CMO No. 34 s. 2017", "description": "Design and conduct psychological research"},
+      {"id": "skill_behavioral_analysis", "label": "Behavioral Analysis", "source": "CMO No. 34 s. 2017", "description": "Observe, measure, and analyze human behavior"},
+      {"id": "skill_psychopathology", "label": "Psychopathology", "source": "CMO No. 34 s. 2017", "description": "Understand and identify psychological disorders using DSM/ICD"},
+      {"id": "skill_group_dynamics", "label": "Group Dynamics and Facilitation", "source": "CMO No. 34 s. 2017", "description": "Facilitate group processes and understand group behavior"},
+      {"id": "skill_dev_psychology", "label": "Developmental Psychology", "source": "CMO No. 34 s. 2017", "description": "Understand psychological development across the lifespan"},
+      {"id": "skill_io_psychology", "label": "Industrial-Organizational Psychology", "source": "CMO No. 34 s. 2017", "description": "Apply psychology in workplace and organizational settings"}
+    ]
+  },
+  "BS Tourism Management": {
+    "cmo_reference": "CMO No. 62 s. 2017",
+    "skills": [
+      {"id": "skill_tourism_planning", "label": "Tourism Planning and Development", "source": "CMO No. 62 s. 2017", "description": "Plan and develop sustainable tourism destinations"},
+      {"id": "skill_tour_operations", "label": "Tour Operations and Management", "source": "CMO No. 62 s. 2017", "description": "Organize and manage domestic and international tours"},
+      {"id": "skill_cultural_heritage", "label": "Cultural Heritage Management", "source": "CMO No. 62 s. 2017", "description": "Preserve and promote cultural and natural heritage sites"},
+      {"id": "skill_ecotourism", "label": "Ecotourism", "source": "CMO No. 62 s. 2017", "description": "Plan and manage responsible ecotourism programs"},
+      {"id": "skill_travel_agency", "label": "Travel Agency Operations", "source": "CMO No. 62 s. 2017", "description": "Operate travel agency services including booking and ticketing"},
+      {"id": "skill_destination_mktg", "label": "Destination Marketing", "source": "CMO No. 62 s. 2017", "description": "Develop and implement destination marketing campaigns"},
+      {"id": "skill_tourism_law", "label": "Tourism Laws and Regulations", "source": "CMO No. 62 s. 2017", "description": "Apply Philippine tourism laws and DOT regulations"},
+      {"id": "skill_hospitality_ops", "label": "Hospitality Operations", "source": "CMO No. 62 s. 2017", "description": "Manage hospitality and accommodation operations"}
+    ]
+  },
+  "BS Hospitality Management": {
+    "cmo_reference": "CMO No. 62 s. 2017",
+    "skills": [
+      {"id": "skill_fnb_service", "label": "Food and Beverage Service", "source": "CMO No. 62 s. 2017", "description": "Manage and deliver food and beverage service operations"},
+      {"id": "skill_rooms_division", "label": "Rooms Division Management", "source": "CMO No. 62 s. 2017", "description": "Manage front office, housekeeping, and reservations"},
+      {"id": "skill_events_mgmt", "label": "Events Management", "source": "CMO No. 62 s. 2017", "description": "Plan and execute MICE and social events"},
+      {"id": "skill_front_office", "label": "Front Office Operations", "source": "CMO No. 62 s. 2017", "description": "Operate front desk and guest services systems"},
+      {"id": "skill_kitchen_ops", "label": "Kitchen Operations", "source": "CMO No. 62 s. 2017", "description": "Manage professional kitchen and culinary operations"},
+      {"id": "skill_customer_service", "label": "Customer Service Management", "source": "CMO No. 62 s. 2017", "description": "Deliver and manage high-quality guest experiences"},
+      {"id": "skill_revenue_mgmt", "label": "Revenue Management", "source": "CMO No. 62 s. 2017", "description": "Optimize pricing, occupancy, and revenue performance"},
+      {"id": "skill_hospitality_mktg", "label": "Hospitality Marketing", "source": "CMO No. 62 s. 2017", "description": "Market hospitality products and services to target segments"}
+    ]
+  },
+  "BS Civil Engineering": {
+    "cmo_reference": "CMO No. 85 s. 2017",
+    "skills": [
+      {"id": "skill_structural_analysis", "label": "Structural Analysis and Design", "source": "CMO No. 85 s. 2017", "description": "Analyze and design structural systems for buildings and infrastructure"},
+      {"id": "skill_construction_mgmt", "label": "Construction Management", "source": "CMO No. 85 s. 2017", "description": "Plan, monitor, and control construction projects"},
+      {"id": "skill_hydraulics", "label": "Hydraulics and Hydrology", "source": "CMO No. 85 s. 2017", "description": "Apply hydraulic principles to water resource systems"},
+      {"id": "skill_surveying", "label": "Surveying and Geomatics", "source": "CMO No. 85 s. 2017", "description": "Conduct topographic and boundary surveys"},
+      {"id": "skill_geotechnical", "label": "Geotechnical Engineering", "source": "CMO No. 85 s. 2017", "description": "Analyze soil and rock for foundation and earthwork design"},
+      {"id": "skill_transportation_eng", "label": "Transportation Engineering", "source": "CMO No. 85 s. 2017", "description": "Design roads, highways, and transportation networks"},
+      {"id": "skill_project_planning", "label": "Project Planning and Control", "source": "CMO No. 85 s. 2017", "description": "Use scheduling tools like CPM and PERT for project management"},
+      {"id": "skill_construction_materials", "label": "Construction Materials and Testing", "source": "CMO No. 85 s. 2017", "description": "Test and evaluate construction materials for project specifications"}
+    ]
+  },
+  "BS Electrical Engineering": {
+    "cmo_reference": "CMO No. 84 s. 2017",
+    "skills": [
+      {"id": "skill_circuit_analysis", "label": "Circuit Analysis", "source": "CMO No. 84 s. 2017", "description": "Analyze AC/DC circuits using theorems and simulation tools"},
+      {"id": "skill_power_systems", "label": "Power Systems Engineering", "source": "CMO No. 84 s. 2017", "description": "Design and analyze electric power generation and distribution"},
+      {"id": "skill_electrical_machines", "label": "Electrical Machines", "source": "CMO No. 84 s. 2017", "description": "Analyze transformers, motors, and generators"},
+      {"id": "skill_control_systems", "label": "Control Systems", "source": "CMO No. 84 s. 2017", "description": "Design and analyze feedback control systems"},
+      {"id": "skill_power_electronics", "label": "Power Electronics", "source": "CMO No. 84 s. 2017", "description": "Design converters, inverters, and power conditioning circuits"},
+      {"id": "skill_electrical_design", "label": "Electrical System Design", "source": "CMO No. 84 s. 2017", "description": "Design wiring systems, load calculations, and electrical plans"},
+      {"id": "skill_automation_elec", "label": "Industrial Automation and PLCs", "source": "CMO No. 84 s. 2017", "description": "Program and deploy industrial automation systems"},
+      {"id": "skill_electrical_safety", "label": "Electrical Safety", "source": "CMO No. 84 s. 2017", "description": "Apply OSHS and PEC safety regulations in electrical work"}
+    ]
+  },
+  "BS Mechanical Engineering": {
+    "cmo_reference": "CMO No. 111 s. 2017",
+    "skills": [
+      {"id": "skill_thermodynamics", "label": "Thermodynamics", "source": "CMO No. 111 s. 2017", "description": "Apply thermodynamic laws to energy systems and heat engines"},
+      {"id": "skill_fluid_mechanics", "label": "Fluid Mechanics", "source": "CMO No. 111 s. 2017", "description": "Analyze fluid behavior in pipes, channels, and machines"},
+      {"id": "skill_machine_design", "label": "Machine Design", "source": "CMO No. 111 s. 2017", "description": "Design mechanical components and power transmission systems"},
+      {"id": "skill_manufacturing", "label": "Manufacturing Processes", "source": "CMO No. 111 s. 2017", "description": "Apply machining, forming, and joining processes in production"},
+      {"id": "skill_materials_science", "label": "Engineering Materials", "source": "CMO No. 111 s. 2017", "description": "Select and test materials for engineering applications"},
+      {"id": "skill_mechatronics", "label": "Mechatronics and Robotics", "source": "CMO No. 111 s. 2017", "description": "Integrate mechanical, electrical, and computing systems"},
+      {"id": "skill_cad_cam", "label": "CAD/CAM Design", "source": "CMO No. 111 s. 2017", "description": "Use CAD/CAM tools for design and manufacturing planning"},
+      {"id": "skill_engineering_mgmt", "label": "Engineering Management", "source": "CMO No. 111 s. 2017", "description": "Manage engineering projects, teams, and resources"}
+    ]
+  },
+  "BS Electronics Engineering": {
+    "cmo_reference": "CMO No. 112 s. 2017",
+    "skills": [
+      {"id": "skill_digital_electronics", "label": "Digital Electronics", "source": "CMO No. 112 s. 2017", "description": "Design logic circuits and digital systems"},
+      {"id": "skill_analog_circuits", "label": "Analog Circuits", "source": "CMO No. 112 s. 2017", "description": "Design amplifiers, filters, and analog signal systems"},
+      {"id": "skill_signal_processing", "label": "Digital Signal Processing", "source": "CMO No. 112 s. 2017", "description": "Apply DSP algorithms to real-world signals"},
+      {"id": "skill_telecommunications", "label": "Telecommunications", "source": "CMO No. 112 s. 2017", "description": "Design and analyze communication systems and protocols"},
+      {"id": "skill_embedded_systems", "label": "Embedded Systems", "source": "CMO No. 112 s. 2017", "description": "Program microcontrollers and embedded hardware"},
+      {"id": "skill_microelectronics", "label": "Microelectronics", "source": "CMO No. 112 s. 2017", "description": "Understand semiconductor devices and IC design"},
+      {"id": "skill_pcb_design", "label": "PCB Design", "source": "CMO No. 112 s. 2017", "description": "Design and lay out printed circuit boards"},
+      {"id": "skill_electronics_manuf", "label": "Electronics Manufacturing", "source": "CMO No. 112 s. 2017", "description": "Understand SMT, PCB assembly, and quality testing processes"}
+    ]
+  },
+  "BS Industrial Engineering": {
+    "cmo_reference": "CMO No. 93 s. 2017",
+    "skills": [
+      {"id": "skill_operations_research", "label": "Operations Research", "source": "CMO No. 93 s. 2017", "description": "Apply linear programming and optimization to industrial problems"},
+      {"id": "skill_work_study", "label": "Work Study and Methods Engineering", "source": "CMO No. 93 s. 2017", "description": "Conduct time and motion studies for process improvement"},
+      {"id": "skill_quality_mgmt", "label": "Quality Management Systems", "source": "CMO No. 93 s. 2017", "description": "Implement ISO and TQM quality management standards"},
+      {"id": "skill_production_planning", "label": "Production Planning and Control", "source": "CMO No. 93 s. 2017", "description": "Plan, schedule, and control manufacturing operations"},
+      {"id": "skill_ergonomics", "label": "Ergonomics and Human Factors", "source": "CMO No. 93 s. 2017", "description": "Design workplaces and systems for human use and safety"},
+      {"id": "skill_supply_chain", "label": "Supply Chain Management", "source": "CMO No. 93 s. 2017", "description": "Manage end-to-end supply chain from procurement to delivery"},
+      {"id": "skill_simulation", "label": "Simulation Modeling", "source": "CMO No. 93 s. 2017", "description": "Build and analyze discrete-event simulation models"},
+      {"id": "skill_lean_manufacturing", "label": "Lean Manufacturing and Six Sigma", "source": "CMO No. 93 s. 2017", "description": "Apply lean and Six Sigma tools to reduce waste and variation"}
+    ]
+  },
+  "BS Architecture": {
+    "cmo_reference": "CMO No. 61 s. 2017",
+    "skills": [
+      {"id": "skill_arch_design", "label": "Architectural Design", "source": "CMO No. 61 s. 2017", "description": "Create functional and aesthetic architectural designs"},
+      {"id": "skill_construction_docs", "label": "Construction Documents", "source": "CMO No. 61 s. 2017", "description": "Prepare detailed working drawings and specifications"},
+      {"id": "skill_building_systems", "label": "Building Systems", "source": "CMO No. 61 s. 2017", "description": "Integrate structural, MEP, and environmental systems in design"},
+      {"id": "skill_urban_planning", "label": "Urban and Environmental Planning", "source": "CMO No. 61 s. 2017", "description": "Plan urban spaces, land use, and environmental design"},
+      {"id": "skill_sustainable_design", "label": "Sustainable Design", "source": "CMO No. 61 s. 2017", "description": "Apply green building principles and LEED/BERDE standards"},
+      {"id": "skill_digital_modeling", "label": "Digital Modeling and BIM", "source": "CMO No. 61 s. 2017", "description": "Create 3D models and BIM documentation using Revit/ArchiCAD"},
+      {"id": "skill_project_mgmt_arch", "label": "Project Management (Architecture)", "source": "CMO No. 61 s. 2017", "description": "Manage architectural project timelines, budgets, and teams"},
+      {"id": "skill_arch_history", "label": "Architectural History and Theory", "source": "CMO No. 61 s. 2017", "description": "Understand architectural movements and their theoretical bases"}
+    ]
+  },
+  "BS Criminology": {
+    "cmo_reference": "CMO No. 20 s. 2013",
+    "skills": [
+      {"id": "skill_criminal_law", "label": "Criminal Law and Jurisprudence", "source": "CMO No. 20 s. 2013", "description": "Apply the Revised Penal Code and related special laws"},
+      {"id": "skill_csi", "label": "Crime Scene Investigation", "source": "CMO No. 20 s. 2013", "description": "Process, document, and preserve crime scene evidence"},
+      {"id": "skill_law_enforcement_admin", "label": "Law Enforcement Administration", "source": "CMO No. 20 s. 2013", "description": "Manage police organization, operations, and community relations"},
+      {"id": "skill_forensic_science", "label": "Forensic Science", "source": "CMO No. 20 s. 2013", "description": "Apply forensic science techniques to criminal investigations"},
+      {"id": "skill_criminal_behavior", "label": "Criminal Behavior and Penology", "source": "CMO No. 20 s. 2013", "description": "Analyze criminal behavior and the correctional system"},
+      {"id": "skill_police_admin", "label": "Police Administration and Operations", "source": "CMO No. 20 s. 2013", "description": "Plan and manage police patrol, intelligence, and operations"},
+      {"id": "skill_juvenile_delinquency", "label": "Juvenile Delinquency and Restorative Justice", "source": "CMO No. 20 s. 2013", "description": "Handle juvenile cases using restorative justice approaches"},
+      {"id": "skill_police_photography", "label": "Police Photography and Documentation", "source": "CMO No. 20 s. 2013", "description": "Document crime scenes and evidence photographically"}
+    ]
+  },
+  "AB Communication": {
+    "cmo_reference": "CMO No. 20 s. 2011",
+    "skills": [
+      {"id": "skill_media_writing", "label": "Media Writing", "source": "CMO No. 20 s. 2011", "description": "Write for print, broadcast, and digital media platforms"},
+      {"id": "skill_broadcast_journalism", "label": "Broadcast Journalism", "source": "CMO No. 20 s. 2011", "description": "Report and present news for radio, TV, and digital platforms"},
+      {"id": "skill_public_relations", "label": "Public Relations", "source": "CMO No. 20 s. 2011", "description": "Plan and execute PR campaigns and media relations"},
+      {"id": "skill_advertising", "label": "Advertising", "source": "CMO No. 20 s. 2011", "description": "Develop advertising strategies and creative campaigns"},
+      {"id": "skill_social_media_mgmt", "label": "Social Media Management", "source": "CMO No. 20 s. 2011", "description": "Manage brand presence and campaigns on social media platforms"},
+      {"id": "skill_video_production", "label": "Video and Film Production", "source": "CMO No. 20 s. 2011", "description": "Plan, shoot, and edit video content for various platforms"},
+      {"id": "skill_comm_research", "label": "Communication Research", "source": "CMO No. 20 s. 2011", "description": "Conduct and evaluate communication research"},
+      {"id": "skill_digital_media", "label": "Digital Media and Online Publishing", "source": "CMO No. 20 s. 2011", "description": "Create and distribute content across digital and social platforms"}
+    ]
+  },
+  "BS Social Work": {
+    "cmo_reference": "CMO No. 40 s. 2017",
+    "skills": [
+      {"id": "skill_social_casework", "label": "Social Casework", "source": "CMO No. 40 s. 2017", "description": "Provide individualized social work interventions for clients"},
+      {"id": "skill_community_organizing", "label": "Community Organizing and Development", "source": "CMO No. 40 s. 2017", "description": "Facilitate community empowerment and development projects"},
+      {"id": "skill_group_work", "label": "Social Group Work", "source": "CMO No. 40 s. 2017", "description": "Facilitate therapeutic and support groups"},
+      {"id": "skill_social_welfare_policy", "label": "Social Welfare Policy and Administration", "source": "CMO No. 40 s. 2017", "description": "Understand and implement social welfare policies and programs"},
+      {"id": "skill_child_protection", "label": "Child Protection and Family Services", "source": "CMO No. 40 s. 2017", "description": "Identify, assess, and intervene in child abuse and neglect cases"},
+      {"id": "skill_counseling_sw", "label": "Counseling and Case Management", "source": "CMO No. 40 s. 2017", "description": "Provide counseling and case management for vulnerable clients"},
+      {"id": "skill_social_research", "label": "Social Work Research", "source": "CMO No. 40 s. 2017", "description": "Conduct applied social research to improve welfare programs"},
+      {"id": "skill_mental_health_sw", "label": "Mental Health and Substance Abuse", "source": "CMO No. 40 s. 2017", "description": "Provide mental health and substance abuse social work services"}
+    ]
+  },
+  "BS Pharmacy": {
+    "cmo_reference": "CMO No. 57 s. 2017",
+    "skills": [
+      {"id": "skill_pharmacology_pharm", "label": "Pharmacology", "source": "CMO No. 57 s. 2017", "description": "Understand drug mechanisms, pharmacokinetics, and drug interactions"},
+      {"id": "skill_pharma_calculations", "label": "Pharmaceutical Calculations", "source": "CMO No. 57 s. 2017", "description": "Compute doses, concentrations, and compounding calculations"},
+      {"id": "skill_dispensing", "label": "Drug Dispensing and Counseling", "source": "CMO No. 57 s. 2017", "description": "Accurately dispense drugs and counsel patients on medication use"},
+      {"id": "skill_clinical_pharmacy", "label": "Clinical Pharmacy", "source": "CMO No. 57 s. 2017", "description": "Provide pharmaceutical care in clinical healthcare settings"},
+      {"id": "skill_pharmacy_law", "label": "Pharmacy Laws and Ethics", "source": "CMO No. 57 s. 2017", "description": "Apply Philippine pharmacy laws, FDA regulations, and ethics"},
+      {"id": "skill_compounding", "label": "Pharmaceutical Compounding", "source": "CMO No. 57 s. 2017", "description": "Prepare sterile and non-sterile compounded formulations"},
+      {"id": "skill_pharmacovigilance", "label": "Pharmacovigilance", "source": "CMO No. 57 s. 2017", "description": "Monitor and report adverse drug reactions and drug safety"},
+      {"id": "skill_drug_info", "label": "Drug Information Management", "source": "CMO No. 57 s. 2017", "description": "Evaluate and communicate drug information to healthcare teams"}
+    ]
+  },
+  "BS Medical Technology": {
+    "cmo_reference": "CMO No. 51 s. 2017",
+    "skills": [
+      {"id": "skill_clin_lab", "label": "Clinical Laboratory Science", "source": "CMO No. 51 s. 2017", "description": "Perform and interpret clinical laboratory tests"},
+      {"id": "skill_hematology", "label": "Hematology", "source": "CMO No. 51 s. 2017", "description": "Analyze blood components and diagnose hematological conditions"},
+      {"id": "skill_microbiology_mt", "label": "Clinical Microbiology", "source": "CMO No. 51 s. 2017", "description": "Culture, identify, and perform sensitivity testing on pathogens"},
+      {"id": "skill_clin_chemistry", "label": "Clinical Chemistry", "source": "CMO No. 51 s. 2017", "description": "Perform and interpret biochemical and clinical chemistry tests"},
+      {"id": "skill_blood_banking", "label": "Blood Banking and Transfusion", "source": "CMO No. 51 s. 2017", "description": "Perform blood typing, crossmatching, and transfusion protocols"},
+      {"id": "skill_histopathology", "label": "Histopathology and Cytology", "source": "CMO No. 51 s. 2017", "description": "Prepare and examine tissue slides for pathological diagnosis"},
+      {"id": "skill_lab_quality", "label": "Laboratory Quality Management", "source": "CMO No. 51 s. 2017", "description": "Implement ISO 15189 and quality assurance in lab operations"},
+      {"id": "skill_lab_safety", "label": "Medical Laboratory Safety", "source": "CMO No. 51 s. 2017", "description": "Apply biosafety levels and laboratory safety protocols"}
+    ]
+  },
+  "BS Physical Therapy": {
+    "cmo_reference": "CMO No. 2 s. 2017",
+    "skills": [
+      {"id": "skill_physical_assessment_pt", "label": "Physical Assessment", "source": "CMO No. 2 s. 2017", "description": "Conduct musculoskeletal and neuromuscular physical assessments"},
+      {"id": "skill_therapeutic_exercise", "label": "Therapeutic Exercise", "source": "CMO No. 2 s. 2017", "description": "Design and supervise therapeutic exercise programs"},
+      {"id": "skill_neurological_rehab", "label": "Neurological Rehabilitation", "source": "CMO No. 2 s. 2017", "description": "Rehabilitate patients with neurological conditions (stroke, TBI)"},
+      {"id": "skill_orthopedic_rehab", "label": "Orthopedic Rehabilitation", "source": "CMO No. 2 s. 2017", "description": "Treat musculoskeletal and post-surgical orthopedic conditions"},
+      {"id": "skill_electrotherapy", "label": "Electrotherapy and Physical Agents", "source": "CMO No. 2 s. 2017", "description": "Apply therapeutic modalities including TENS, ultrasound, and laser"},
+      {"id": "skill_pt_documentation", "label": "PT Documentation", "source": "CMO No. 2 s. 2017", "description": "Write SOAP notes and maintain physical therapy records"},
+      {"id": "skill_sports_pt", "label": "Sports Physical Therapy", "source": "CMO No. 2 s. 2017", "description": "Prevent and rehabilitate sports-related injuries"},
+      {"id": "skill_manual_therapy", "label": "Manual Therapy", "source": "CMO No. 2 s. 2017", "description": "Apply joint mobilization, manipulation, and soft tissue techniques"}
+    ]
+  },
+  "BS Agriculture": {
+    "cmo_reference": "CMO No. 70 s. 2012",
+    "skills": [
+      {"id": "skill_crop_production", "label": "Crop Production", "source": "CMO No. 70 s. 2012", "description": "Manage crop production, planting systems, and agronomic practices"},
+      {"id": "skill_soil_science", "label": "Soil Science and Fertility", "source": "CMO No. 70 s. 2012", "description": "Analyze soil properties and manage soil fertility"},
+      {"id": "skill_animal_science", "label": "Animal Science and Production", "source": "CMO No. 70 s. 2012", "description": "Manage livestock production and animal health"},
+      {"id": "skill_agri_economics", "label": "Agricultural Economics", "source": "CMO No. 70 s. 2012", "description": "Analyze agricultural markets, costs, and farm financial management"},
+      {"id": "skill_farm_management", "label": "Farm Management", "source": "CMO No. 70 s. 2012", "description": "Plan and manage farm operations and resources"},
+      {"id": "skill_plant_pathology", "label": "Plant Pathology and Entomology", "source": "CMO No. 70 s. 2012", "description": "Diagnose and manage plant diseases and insect pests"},
+      {"id": "skill_agri_technology", "label": "Agricultural Technology", "source": "CMO No. 70 s. 2012", "description": "Apply precision agriculture and modern farming technologies"},
+      {"id": "skill_food_production", "label": "Food Production Systems", "source": "CMO No. 70 s. 2012", "description": "Manage post-harvest handling and value-added food production"}
+    ]
+  },
+  "BS Environmental Science": {
+    "cmo_reference": "CMO No. 27 s. 2017",
+    "skills": [
+      {"id": "skill_env_monitoring", "label": "Environmental Monitoring", "source": "CMO No. 27 s. 2017", "description": "Monitor air, water, and soil quality using field and lab methods"},
+      {"id": "skill_ecology", "label": "Ecology and Biodiversity", "source": "CMO No. 27 s. 2017", "description": "Analyze ecological systems and biodiversity assessments"},
+      {"id": "skill_eia", "label": "Environmental Impact Assessment", "source": "CMO No. 27 s. 2017", "description": "Conduct EIA studies and prepare environmental compliance reports"},
+      {"id": "skill_pollution_control", "label": "Pollution Control and Management", "source": "CMO No. 27 s. 2017", "description": "Design and implement pollution prevention and control measures"},
+      {"id": "skill_gis", "label": "Geographic Information Systems (GIS)", "source": "CMO No. 27 s. 2017", "description": "Use GIS tools for spatial analysis and environmental mapping"},
+      {"id": "skill_climate_adaptation", "label": "Climate Change and Disaster Risk", "source": "CMO No. 27 s. 2017", "description": "Assess climate risks and plan adaptation and mitigation strategies"},
+      {"id": "skill_waste_mgmt", "label": "Solid Waste Management", "source": "CMO No. 27 s. 2017", "description": "Plan and manage solid and hazardous waste programs"},
+      {"id": "skill_env_law", "label": "Environmental Law and Policy", "source": "CMO No. 27 s. 2017", "description": "Apply DENR regulations, RA 9275, RA 9003, and other environmental laws"}
+    ]
+  },
+  "BS Legal Management": {
+    "cmo_reference": "CMO No. 53 s. 2017",
+    "skills": [
+      {"id": "skill_ph_legal_system", "label": "Philippine Legal System", "source": "CMO No. 53 s. 2017", "description": "Understand sources of Philippine law, court hierarchy, and legal processes"},
+      {"id": "skill_contracts", "label": "Obligations and Contracts", "source": "CMO No. 53 s. 2017", "description": "Apply the Civil Code provisions on obligations and contracts"},
+      {"id": "skill_legal_research", "label": "Legal Research and Writing", "source": "CMO No. 53 s. 2017", "description": "Conduct legal research using statutes, jurisprudence, and databases"},
+      {"id": "skill_corporate_law", "label": "Corporate Law", "source": "CMO No. 53 s. 2017", "description": "Understand Revised Corporation Code and corporate governance"},
+      {"id": "skill_constitutional_law", "label": "Constitutional Law", "source": "CMO No. 53 s. 2017", "description": "Interpret the 1987 Philippine Constitution and bill of rights"},
+      {"id": "skill_labor_law", "label": "Labor Law and Industrial Relations", "source": "CMO No. 53 s. 2017", "description": "Apply the Labor Code in employment and industrial relations"},
+      {"id": "skill_criminal_procedure", "label": "Criminal Procedure", "source": "CMO No. 53 s. 2017", "description": "Understand arrest, prosecution, and criminal court procedures"},
+      {"id": "skill_legal_ethics", "label": "Legal Ethics and Professional Responsibility", "source": "CMO No. 53 s. 2017", "description": "Apply the Code of Professional Responsibility in legal practice"}
+    ]
+  },
+  "BS Food Technology": {
+    "cmo_reference": "CMO No. 4 s. 2012",
+    "skills": [
+      {"id": "skill_food_processing", "label": "Food Processing and Preservation", "source": "CMO No. 4 s. 2012", "description": "Apply thermal, chemical, and physical food processing methods"},
+      {"id": "skill_food_safety", "label": "Food Safety and Quality Assurance", "source": "CMO No. 4 s. 2012", "description": "Implement HACCP, GMP, and ISO 22000 food safety systems"},
+      {"id": "skill_food_chemistry", "label": "Food Chemistry", "source": "CMO No. 4 s. 2012", "description": "Analyze food composition, reactions, and functional properties"},
+      {"id": "skill_sensory_eval", "label": "Sensory Evaluation", "source": "CMO No. 4 s. 2012", "description": "Conduct and analyze sensory tests for food products"},
+      {"id": "skill_product_dev_food", "label": "Food Product Development", "source": "CMO No. 4 s. 2012", "description": "Develop and commercialize new food products"},
+      {"id": "skill_food_microbiology", "label": "Food Microbiology", "source": "CMO No. 4 s. 2012", "description": "Analyze microbial contamination and spoilage in food systems"},
+      {"id": "skill_packaging", "label": "Packaging Technology", "source": "CMO No. 4 s. 2012", "description": "Select and design appropriate packaging for food products"},
+      {"id": "skill_nutrition_labeling", "label": "Nutrition and Labeling Compliance", "source": "CMO No. 4 s. 2012", "description": "Compute nutritional values and comply with FDA labeling requirements"}
+    ]
+  },
+  "BS Computer Engineering": {
+    "cmo_reference": "CMO No. 25 s. 2015",
+    "skills": [
+      {"id": "skill_computer_org", "label": "Computer Organization and Architecture", "source": "CMO No. 25 s. 2015", "description": "Understand processor design, memory hierarchy, and instruction sets"},
+      {"id": "skill_embedded_ce", "label": "Embedded Systems", "source": "CMO No. 25 s. 2015", "description": "Design and program microcontroller-based embedded systems"},
+      {"id": "skill_dsp", "label": "Digital Signal Processing", "source": "CMO No. 25 s. 2015", "description": "Apply DSP algorithms to audio, image, and sensor signals"},
+      {"id": "skill_vlsi", "label": "VLSI Design", "source": "CMO No. 25 s. 2015", "description": "Design integrated circuits using HDL and EDA tools"},
+      {"id": "skill_computer_networks", "label": "Computer Networks", "source": "CMO No. 25 s. 2015", "description": "Design and configure computer networks and protocols"},
+      {"id": "skill_real_time_systems", "label": "Real-Time and Fault-Tolerant Systems", "source": "CMO No. 25 s. 2015", "description": "Design systems with real-time constraints and fault tolerance"},
+      {"id": "skill_firmware", "label": "Firmware Development", "source": "CMO No. 25 s. 2015", "description": "Write firmware for hardware components in C/C++ and assembly"},
+      {"id": "skill_hardware_testing", "label": "Hardware Testing and Validation", "source": "CMO No. 25 s. 2015", "description": "Test, debug, and validate hardware prototypes and systems"}
+    ]
+  },
+  "BS Chemical Engineering": {
+    "cmo_reference": "CMO No. 81 s. 2017",
+    "skills": [
+      {"id": "skill_chem_process", "label": "Chemical Process Design", "source": "CMO No. 81 s. 2017", "description": "Design and optimize chemical process equipment and flowsheets"},
+      {"id": "skill_thermodynamics_chem", "label": "Chemical Engineering Thermodynamics", "source": "CMO No. 81 s. 2017", "description": "Apply thermodynamic principles to chemical systems and phase equilibria"},
+      {"id": "skill_mass_transfer", "label": "Mass and Heat Transfer", "source": "CMO No. 81 s. 2017", "description": "Design distillation, absorption, and heat exchange systems"},
+      {"id": "skill_reaction_eng", "label": "Reaction Engineering", "source": "CMO No. 81 s. 2017", "description": "Design chemical reactors and optimize reaction conditions"},
+      {"id": "skill_process_control", "label": "Process Control and Instrumentation", "source": "CMO No. 81 s. 2017", "description": "Design control loops and instrument process variables"},
+      {"id": "skill_plant_design", "label": "Plant Design and Economics", "source": "CMO No. 81 s. 2017", "description": "Design full chemical plants with cost estimation and feasibility analysis"},
+      {"id": "skill_chem_safety", "label": "Chemical Safety and Hazard Management", "source": "CMO No. 81 s. 2017", "description": "Apply HAZOP and chemical safety regulations"},
+      {"id": "skill_env_chem_eng", "label": "Environmental Chemical Engineering", "source": "CMO No. 81 s. 2017", "description": "Design environmental control systems for chemical processes"}
+    ]
+  },
+  "BS Biology": {
+    "cmo_reference": "CMO No. 9 s. 2008",
+    "skills": [
+      {"id": "skill_molecular_bio", "label": "Molecular Biology", "source": "CMO No. 9 s. 2008", "description": "Apply PCR, gel electrophoresis, and molecular techniques"},
+      {"id": "skill_ecology_bio", "label": "Ecology and Field Biology", "source": "CMO No. 9 s. 2008", "description": "Conduct field surveys and ecological assessments"},
+      {"id": "skill_genetics", "label": "Genetics and Genomics", "source": "CMO No. 9 s. 2008", "description": "Understand Mendelian genetics, population genetics, and genomics"},
+      {"id": "skill_biochemistry", "label": "Biochemistry", "source": "CMO No. 9 s. 2008", "description": "Analyze biomolecules, enzyme kinetics, and metabolic pathways"},
+      {"id": "skill_microbiology_bio", "label": "Microbiology", "source": "CMO No. 9 s. 2008", "description": "Culture, identify, and analyze microorganisms"},
+      {"id": "skill_cell_biology", "label": "Cell Biology", "source": "CMO No. 9 s. 2008", "description": "Understand cell structure, function, and signaling pathways"},
+      {"id": "skill_research_bio", "label": "Research Methodology in Biology", "source": "CMO No. 9 s. 2008", "description": "Design and conduct biological research with statistical analysis"},
+      {"id": "skill_biodiversity", "label": "Biodiversity and Conservation", "source": "CMO No. 9 s. 2008", "description": "Assess and conserve Philippine biodiversity and ecosystems"}
+    ]
+  },
+  "BS Marketing Management": {
+    "cmo_reference": "CMO No. 17 s. 2017",
+    "skills": [
+      {"id": "skill_market_research", "label": "Market Research", "source": "CMO No. 17 s. 2017", "description": "Design and conduct consumer research and competitive analysis"},
+      {"id": "skill_digital_mktg", "label": "Digital Marketing", "source": "CMO No. 17 s. 2017", "description": "Execute SEO, SEM, social media, and email marketing campaigns"},
+      {"id": "skill_brand_mgmt", "label": "Brand Management", "source": "CMO No. 17 s. 2017", "description": "Develop and manage brand identity, positioning, and equity"},
+      {"id": "skill_consumer_behavior_mktg", "label": "Consumer Behavior", "source": "CMO No. 17 s. 2017", "description": "Analyze consumer decision-making and buying patterns"},
+      {"id": "skill_sales_mgmt", "label": "Sales Management", "source": "CMO No. 17 s. 2017", "description": "Plan, manage, and evaluate sales force and territory management"},
+      {"id": "skill_mktg_analytics", "label": "Marketing Analytics", "source": "CMO No. 17 s. 2017", "description": "Use data and metrics to evaluate campaign and business performance"},
+      {"id": "skill_integrated_mktg_comm", "label": "Integrated Marketing Communications", "source": "CMO No. 17 s. 2017", "description": "Develop holistic campaigns across advertising, PR, and promotions"},
+      {"id": "skill_ecommerce", "label": "E-Commerce and Digital Commerce", "source": "CMO No. 17 s. 2017", "description": "Manage online stores, marketplaces, and digital commerce operations"}
     ]
   }
 }

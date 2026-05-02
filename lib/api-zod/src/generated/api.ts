@@ -15,14 +15,14 @@ export const HealthCheckResponse = zod.object({
 });
 
 /**
- * @summary Get all degree programs
+ * @summary Get all 30 degree programs
  */
 export const GetProgramsResponse = zod.object({
   programs: zod.array(zod.string()),
 });
 
 /**
- * @summary Get skills checklist for a degree program
+ * @summary Get CHED CMO skills checklist for a degree program
  */
 export const GetSkillsByProgramParams = zod.object({
   program: zod.coerce.string(),
@@ -42,12 +42,33 @@ export const GetSkillsByProgramResponse = zod.object({
 });
 
 /**
+ * @summary Get job titles for a degree program
+ */
+export const GetJobsByProgramParams = zod.object({
+  program: zod.coerce.string(),
+});
+
+export const GetJobsByProgramResponse = zod.object({
+  program: zod.string(),
+  jobs: zod.array(zod.string()),
+});
+
+/**
  * @summary Submit assessment and get automation vulnerability results
  */
+export const submitAssessmentBodySkillsMaxOne = 5;
+
 export const SubmitAssessmentBody = zod.object({
   degree_program: zod.string(),
   job_title: zod.string(),
-  skills: zod.record(zod.string(), zod.number()),
+  skills: zod
+    .record(
+      zod.string(),
+      zod.number().min(1).max(submitAssessmentBodySkillsMaxOne),
+    )
+    .describe(
+      "Skill proficiency ratings (1=None, 2=Beginner, 3=Intermediate, 4=Proficient, 5=Expert)",
+    ),
   task_distribution: zod.record(zod.string(), zod.number()).optional(),
 });
 
@@ -83,6 +104,7 @@ export const SubmitAssessmentResponse = zod.object({
       in_ched_cmo: zod.boolean(),
       gap_type: zod.enum(["implementation", "design"]),
       impact_score: zod.number(),
+      user_proficiency: zod.number().optional(),
     }),
   ),
   recommendations: zod.array(
@@ -99,7 +121,7 @@ export const SubmitAssessmentResponse = zod.object({
 });
 
 /**
- * @summary Get aggregated SHAP findings per degree program (research dashboard)
+ * @summary Get aggregated SHAP findings per degree program
  */
 export const GetProgramSummaryResponse = zod.object({
   programs: zod.array(
@@ -130,6 +152,7 @@ export const GetProgramSummaryResponse = zod.object({
           in_ched_cmo: zod.boolean(),
           gap_type: zod.enum(["implementation", "design"]),
           impact_score: zod.number(),
+          user_proficiency: zod.number().optional(),
         }),
       ),
     }),
@@ -168,7 +191,7 @@ export const GetGlobalStatsResponse = zod.object({
 });
 
 /**
- * @summary Submit System Usability Scale questionnaire responses
+ * @summary Submit System Usability Scale questionnaire
  */
 export const submitSusBodyResponsesMin = 10;
 export const submitSusBodyResponsesMax = 10;
@@ -188,7 +211,7 @@ export const SubmitSusResponse = zod.object({
 });
 
 /**
- * @summary Get aggregated SUS results (admin)
+ * @summary Get aggregated SUS results
  */
 export const GetSusResultsResponse = zod.object({
   total_responses: zod.number(),

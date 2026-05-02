@@ -32,6 +32,11 @@ def _load_cmos() -> dict:
         return json.load(f)
 
 
+def _load_program_skills() -> dict[str, list[str]]:
+    cmos = _load_cmos()
+    return {prog: [s["id"] for s in data["skills"]] for prog, data in cmos.items()}
+
+
 def _get_skill_label(skill_id: str, cmos: dict) -> str:
     for program_data in cmos.values():
         for skill in program_data.get("skills", []):
@@ -41,11 +46,10 @@ def _get_skill_label(skill_id: str, cmos: dict) -> str:
 
 
 def _get_program_typical_skills(degree_program: str) -> dict[str, int]:
-    """Return the typical (mean) skill profile for a program based on POARD averages."""
-    from model.train import PROGRAM_SKILLS
-    program_skill_ids = PROGRAM_SKILLS.get(degree_program, [])
-    # Assume 70% proficiency rate for all program skills (POARD mean is ~0.72)
-    return {skill_id: 1 for skill_id in program_skill_ids}
+    """Return a typical intermediate skill profile (proficiency=3) for a program."""
+    program_skills = _load_program_skills()
+    skill_ids = program_skills.get(degree_program, [])
+    return {skill_id: 3 for skill_id in skill_ids}
 
 
 def _compute_skill_gaps(
@@ -56,28 +60,26 @@ def _compute_skill_gaps(
     use_typical: bool = False,
 ) -> list[dict]:
     """
-    Identify skill gaps.
+    Identify skill gaps from the user's proficiency profile.
 
-    When `use_typical=True` (no user skills provided), rank gaps by absolute
-    SKILL_RISK_WEIGHT — the most protective skills for the program that are
-    underutilised in the labour market become the upskilling targets.
-
-    When `use_typical=False` (user provided skills), use SHAP protective factors
-    for skills the user doesn't have.
+    With proficiency scale 1-5:
+    - Gaps are skills where the user is weak (proficiency <= 2) AND the skill is protective
+    - Or skills the user hasn't rated (proficiency=3 default) that SHAP flagged
     """
-    from model.train import SKILL_RISK_WEIGHTS, PROGRAM_SKILLS
+    from model.train import SKILL_RISK_WEIGHTS
 
+    program_skills = _load_program_skills()
     gaps = []
     program_data = cmos.get(degree_program, {})
     ched_skill_ids = {s["id"] for s in program_data.get("skills", [])}
 
     if use_typical:
-        # Rule-based: pick the most protective skills for this program
-        program_skill_ids = PROGRAM_SKILLS.get(degree_program, [])
+        # Rule-based: identify most protective skills for this program
+        program_skill_ids = program_skills.get(degree_program, [])
         scored = []
         for skill_id in program_skill_ids:
             weight = SKILL_RISK_WEIGHTS.get(skill_id, 0)
-            if weight < 0:  # protective — negative weight = reduces risk
+            if weight < 0:
                 scored.append((skill_id, abs(weight)))
         scored.sort(key=lambda x: x[1], reverse=True)
 
@@ -89,23 +91,45 @@ def _compute_skill_gaps(
                 "in_ched_cmo": in_ched,
                 "gap_type": "implementation" if in_ched else "design",
                 "impact_score": round(impact, 4),
+                "user_proficiency": None,
             })
     else:
-        # SHAP-based: protective factors the user doesn't currently have
-        for factor in shap_explanation.get("top_protective_factors", []):
-            skill_id = factor["skill"]
-            if not skill_id.startswith("skill_"):
-                continue
-            user_has_skill = bool(skills.get(skill_id, 0))
-            if not user_has_skill:
+        # Proficiency-based: skills the user rated low (1-2) that would reduce risk
+        program_skill_ids = program_skills.get(degree_program, [])
+        for skill_id in program_skill_ids:
+            weight = SKILL_RISK_WEIGHTS.get(skill_id, 0)
+            user_proficiency = skills.get(skill_id, 3)
+            if weight < 0 and user_proficiency <= 2:
                 in_ched = skill_id in ched_skill_ids
                 gaps.append({
                     "skill_id": skill_id,
                     "skill_label": _get_skill_label(skill_id, cmos),
                     "in_ched_cmo": in_ched,
                     "gap_type": "implementation" if in_ched else "design",
-                    "impact_score": round(factor["contribution"], 4),
+                    "impact_score": round(abs(weight), 4),
+                    "user_proficiency": user_proficiency,
                 })
+        # Sort by impact score
+        gaps.sort(key=lambda x: x["impact_score"], reverse=True)
+        # Fill from SHAP if few gaps found
+        if len(gaps) < 3:
+            for factor in shap_explanation.get("top_protective_factors", []):
+                skill_id = factor["skill"]
+                if not skill_id.startswith("skill_"):
+                    continue
+                if any(g["skill_id"] == skill_id for g in gaps):
+                    continue
+                user_proficiency = skills.get(skill_id, 3)
+                if user_proficiency < 4:
+                    in_ched = skill_id in ched_skill_ids
+                    gaps.append({
+                        "skill_id": skill_id,
+                        "skill_label": _get_skill_label(skill_id, cmos),
+                        "in_ched_cmo": in_ched,
+                        "gap_type": "implementation" if in_ched else "design",
+                        "impact_score": round(factor["contribution"], 4),
+                        "user_proficiency": user_proficiency,
+                    })
 
     return gaps[:6]
 
@@ -141,7 +165,7 @@ async def submit_assessment(body: AssessmentInput):
     task_distribution = body.task_distribution or {}
     use_typical = len(skills) == 0
 
-    # If no skills provided, use program typical profile
+    # If no skills provided, use program typical profile (proficiency=3)
     effective_skills = skills if skills else _get_program_typical_skills(body.degree_program)
 
     try:
@@ -172,25 +196,19 @@ async def submit_assessment(body: AssessmentInput):
         program_average = program_averages.get(body.degree_program, 0.50)
         percentile = 50
 
-    # SHAP explanation
     try:
         shap_explanation = explain_prediction(
-            result["X"],
-            body.degree_program,
-            effective_skills,
-            task_distribution,
+            result["X"], body.degree_program, effective_skills, task_distribution,
         )
     except Exception as e:
         print(f"SHAP error: {e}")
         shap_explanation = {"top_risk_factors": [], "top_protective_factors": []}
 
-    # Skill gaps
     cmos = _load_cmos()
     skill_gaps = _compute_skill_gaps(
         body.degree_program, effective_skills, shap_explanation, cmos, use_typical=use_typical
     )
 
-    # Course recommendations
     try:
         recommendations = generate_recommendations(skill_gaps, body.degree_program, body.job_title)
     except Exception as e:
