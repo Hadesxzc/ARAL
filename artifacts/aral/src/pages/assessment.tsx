@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, Link } from "wouter";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -39,22 +39,6 @@ const PROGRAMS_FALLBACK = [
   "BS Nursing",
 ];
 
-type AssessmentResult = {
-  vulnerability_score: number;
-  risk_level: string;
-  risk_label: string;
-  risk_color: string;
-  program_average: number;
-  percentile: number;
-  shap_explanation: {
-    top_risk_factors: Array<{ skill: string; skill_label: string; contribution: number; direction: string }>;
-    top_protective_factors: Array<{ skill: string; skill_label: string; contribution: number; direction: string }>;
-  };
-  skill_gaps: Array<{ skill_id: string; skill_label: string; in_ched_cmo: boolean; gap_type: string; impact_score: number }>;
-  recommendations: Array<{ skill: string; course_title: string; platform: string; url: string; is_free: boolean; reason?: string }>;
-  program_comparison: Record<string, number>;
-};
-
 const LOADING_MESSAGES = [
   "Analyzing your automation vulnerability...",
   "Running SHAP analysis on your program profile...",
@@ -64,11 +48,11 @@ const LOADING_MESSAGES = [
 ];
 
 export default function Assessment() {
-  const [, setLocation] = useLocation();
   const [open, setOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const [loadingIdx, setLoadingIdx] = useState(0);
 
   const { data: programsData } = useGetPrograms({
@@ -94,11 +78,13 @@ export default function Assessment() {
     setSelectedProgram(program);
     setJobTitle("");
     setOpen(false);
+    setError("");
   };
 
   const handleSubmit = () => {
     if (!selectedProgram || !jobTitle) return;
     setIsSubmitting(true);
+    setError("");
 
     const interval = setInterval(() => {
       setLoadingIdx((i) => (i + 1) % LOADING_MESSAGES.length);
@@ -110,21 +96,25 @@ export default function Assessment() {
           degree_program: selectedProgram,
           job_title: jobTitle,
           skills: {},
-          task_distribution: {},
         },
       },
       {
-        onSuccess: (result: AssessmentResult) => {
+        onSuccess: (result) => {
           clearInterval(interval);
           localStorage.setItem(
             "aral_last_result",
             JSON.stringify({ ...result, degree_program: selectedProgram, job_title: jobTitle })
           );
-          setLocation("/results");
+          window.location.href = "/results";
         },
-        onError: () => {
+        onError: (err) => {
           clearInterval(interval);
           setIsSubmitting(false);
+          setError(
+            err instanceof Error
+              ? `Assessment failed: ${err.message}`
+              : "Something went wrong. Please try again."
+          );
         },
       }
     );
@@ -184,6 +174,14 @@ export default function Assessment() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+
+            {/* Error banner */}
+            {error && (
+              <div className="p-3 rounded-lg border border-destructive/40 bg-destructive/5 text-destructive text-sm">
+                {error}
+              </div>
+            )}
+
             {/* Step 1 — Program */}
             <div className="space-y-2">
               <div className="flex items-center gap-2 mb-1">
@@ -272,7 +270,7 @@ export default function Assessment() {
                   <span className="text-sm text-muted-foreground">Loading job titles...</span>
                 </div>
               ) : (
-                <Select value={jobTitle} onValueChange={setJobTitle}>
+                <Select value={jobTitle} onValueChange={(v) => { setJobTitle(v); setError(""); }}>
                   <SelectTrigger
                     className={`h-11 text-sm border-2 transition-all ${
                       jobTitle
