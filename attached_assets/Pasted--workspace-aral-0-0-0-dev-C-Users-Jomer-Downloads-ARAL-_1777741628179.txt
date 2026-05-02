@@ -1,3 +1,4 @@
+
 > @workspace/aral@0.0.0 dev C:\Users\Jomer\Downloads\ARAL\ARAL\artifacts\aral
 > vite --config vite.config.ts --host 0.0.0.0
 
