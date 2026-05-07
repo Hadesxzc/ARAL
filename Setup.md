@@ -87,3 +87,16 @@ pnpm --filter @workspace/api-spec run codegen
 - Ignacio, John Jomer R. — Developer
 - Maddara, Darren Bjorn P. — Data Analysis
 - Tarayao, Mark Daniel B. — Developer
+
+
+TO RUN 
+1ST TERMINAL - cd "C:\Users\Jomer\Downloads\ARAL-THESIS\ARAL-THESIS\backend"
+python -m uvicorn main:app --host 0.0.0.0 --port 8080 --reload
+
+2ND TERMINAL - cd "C:\Users\Jomer\Downloads\ARAL-THESIS\ARAL-THESIS\artifacts\aral"
+$env:PORT = "3000"
+$env:BASE_PATH = "/"
+pnpm run dev
+
+
+tAPOS PUNTA KA NALANG Sa port 3000
