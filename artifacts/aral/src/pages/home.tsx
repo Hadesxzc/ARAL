@@ -76,7 +76,7 @@ export default function Home() {
             University of Saint Louis Tuguegarao
           </Badge>
           <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
-            Is Your Career Ready<br />for Automation?
+            Is Your Career at Risk<br />of Automation?
           </h1>
           <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto mb-10 leading-relaxed">
             ARAL predicts your automation vulnerability using a localized machine learning model trained on Filipino graduate data — 
