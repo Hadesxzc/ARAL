@@ -198,6 +198,16 @@ SKILL_RISK_WEIGHTS = {
     "skill_market_research":-0.07,"skill_digital_mktg":-0.07,"skill_brand_mgmt":-0.10,
     "skill_consumer_behavior_mktg":-0.07,"skill_sales_mgmt":-0.08,"skill_mktg_analytics":-0.11,
     "skill_integrated_mktg_comm":-0.08,"skill_ecommerce":-0.09,
+
+    # Task-based skills (for custom jobs)
+    # These are protective (negative weights) - higher proficiency reduces vulnerability
+    "skill_data_entry":+0.08,"skill_document_mgmt":+0.05,"skill_digital_literacy":-0.08,
+    "skill_data_analysis":-0.10,"skill_analytics":-0.09,"skill_communication":-0.08,
+    "skill_client_relations":-0.07,"skill_teamwork":-0.06,"skill_interpersonal":-0.07,
+    "skill_critical_thinking":-0.10,"skill_problem_solving":-0.09,"skill_management":-0.08,
+    "skill_leadership":-0.12,"skill_creativity":-0.08,"skill_teaching":-0.09,
+    "skill_mentoring":-0.10,"skill_physical":+0.05,"skill_caregiving":-0.07,
+    "skill_empathy":-0.08,
 }
 
 # Base vulnerability ranges per program (calibrated to Philippine labor market)

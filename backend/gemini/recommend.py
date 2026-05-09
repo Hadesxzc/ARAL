@@ -262,6 +262,44 @@ COURSE_CATALOG: dict[str, list[dict]] = {
         {"course_title": "Statistics for Nurses", "platform": "edX", "url": "https://www.edx.org/learn/statistics", "is_free": True, "reason": "Statistical competency enables nurses to critically evaluate clinical research."},
     ],
 
+    # ── TASK-BASED SKILLS (for custom jobs) ────────────────────────
+    "skill_teaching": [
+        {"course_title": "Learning to Teach Online", "platform": "Coursera", "url": "https://www.coursera.org/learn/learning-to-teach-online", "is_free": True, "reason": "Teaching skills require human interaction that AI cannot fully replicate."},
+        {"course_title": "Teacher Development Masterclass", "platform": "Udemy", "url": "https://www.udemy.com/course/teacher-training/", "is_free": False, "reason": "Professional teaching credentials enhance career protection."},
+    ],
+    "skill_mentoring": [
+        {"course_title": "Coaching and Mentoring", "platform": "Coursera", "url": "https://www.coursera.org/learn/coaching-mentoring", "is_free": True, "reason": "Mentoring requires emotional intelligence and personalized guidance."},
+        {"course_title": "Leadership Coaching Certificate", "platform": "LinkedIn Learning", "url": "https://www.linkedin.com/learning/", "is_free": False, "reason": "Professional coaching skills are highly valued and resistant to automation."},
+    ],
+    "skill_communication": [
+        {"course_title": "Business Writing", "platform": "Coursera", "url": "https://www.coursera.org/learn/business-writing", "is_free": True, "reason": "Clear communication is a key human skill that resists automation."},
+        {"course_title": "Presentation Skills", "platform": "Udemy", "url": "https://www.udemy.com/course/presentation-skills/", "is_free": False, "reason": "Effective presentation requires human persuasion and adaptability."},
+    ],
+    "skill_critical_thinking": [
+        {"course_title": "Critical Thinking", "platform": "Coursera", "url": "https://www.coursera.org/learn/critical-thinking", "is_free": True, "reason": "Critical thinking is essential for problem-solving that AI cannot easily replace."},
+        {"course_title": "Logical and Critical Thinking", "platform": "FutureLearn", "url": "https://www.futurelearn.com/courses/logical-critical-thinking", "is_free": True, "reason": "Advanced reasoning skills differentiate human judgment from automation."},
+    ],
+    "skill_problem_solving": [
+        {"course_title": "Problem Solving", "platform": "Coursera", "url": "https://www.coursera.org/learn/problem-solving", "is_free": True, "reason": "Problem-solving requires creative thinking and contextual judgment."},
+        {"course_title": "Advanced Problem Solving", "platform": "LinkedIn Learning", "url": "https://www.linkedin.com/learning/", "is_free": False, "reason": "Expert-level problem solving is highly valued in the workplace."},
+    ],
+    "skill_leadership": [
+        {"course_title": "Leadership Fundamentals", "platform": "Coursera", "url": "https://www.coursera.org/learn/leadership-fundamentals", "is_free": True, "reason": "Leadership requires vision, empathy, and team motivation - all human skills."},
+        {"course_title": "Executive Leadership Certificate", "platform": "Udemy", "url": "https://www.udemy.com/course/leadership-certification/", "is_free": False, "reason": "Executive leadership skills are essential for career advancement."},
+    ],
+    "skill_data_analysis": [
+        {"course_title": "Data Analysis with Python", "platform": "Coursera", "url": "https://www.coursera.org/learn/data-analysis-python", "is_free": True, "reason": "Data analysis is a top protective skill against automation."},
+        {"course_title": "Data Analytics Bootcamp", "platform": "Udemy", "url": "https://www.udemy.com/course/data-analytics-bootcamp/", "is_free": False, "reason": "Comprehensive data analytics skills are highly valued."},
+    ],
+    "skill_creativity": [
+        {"course_title": "Creative Thinking", "platform": "Coursera", "url": "https://www.coursera.org/learn/creative-thinking", "is_free": True, "reason": "Creativity is a distinctively human capability that resists automation."},
+        {"course_title": "Design Thinking Masterclass", "platform": "Udemy", "url": "https://www.udemy.com/course/design-thinking-course/", "is_free": False, "reason": "Creative problem-solving through design thinking is highly valuable."},
+    ],
+    "skill_caregiving": [
+        {"course_title": "Caregiving Skills", "platform": "Coursera", "url": "https://www.coursera.org/learn/caregiving", "is_free": True, "reason": "Caregiving requires empathy and human connection."},
+        {"course_title": "Patient Care Certification", "platform": "Udemy", "url": "https://www.udemy.com/course/patient-care/", "is_free": False, "reason": "Professional caregiving credentials enhance job security."},
+    ],
+
     # ── GENERAL FALLBACK ──────────────────────────────────────────
     "default": [
         {"course_title": "Fundamentals of Digital Marketing", "platform": "Google Digital Garage", "url": "https://learndigital.withgoogle.com/digitalgarage/course/digital-marketing", "is_free": True, "reason": "Digital literacy broadly reduces automation vulnerability across all career paths."},

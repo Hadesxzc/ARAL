@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Command,
   CommandEmpty,
@@ -31,6 +32,8 @@ import {
   getGetJobsByProgramQueryKey,
   getGetSkillsByProgramQueryKey,
 } from "@workspace/api-client-react";
+
+const API_BASE = ""; // Use Vite proxy (/api routes to localhost:8080)
 
 const PROGRAMS_FALLBACK = [
   "BS Accountancy",
@@ -61,10 +64,51 @@ export default function Assessment() {
   const [open, setOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState("");
   const [jobTitle, setJobTitle] = useState("");
+  const [customJobTitle, setCustomJobTitle] = useState("");
+  const [isCustomJob, setIsCustomJob] = useState(false);
+  const [customJobSkills, setCustomJobSkills] = useState<any[]>([]);
+  const [customJobSkillsLoading, setCustomJobSkillsLoading] = useState(false);
   const [skillRatings, setSkillRatings] = useState<Record<string, number>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [loadingIdx, setLoadingIdx] = useState(0);
+
+  // Fetch skills for custom job when custom job title changes
+  useEffect(() => {
+    if (!selectedProgram || !isCustomJob || !customJobTitle.trim()) {
+      setCustomJobSkills([]);
+      return;
+    }
+
+    const fetchCustomJobSkills = async () => {
+      setCustomJobSkillsLoading(true);
+      console.log("Fetching custom job skills for:", customJobTitle);
+      try {
+        const encodedJob = encodeURIComponent(customJobTitle.trim());
+        const encodedProgram = encodeURIComponent(selectedProgram);
+        const url = `${API_BASE}/api/skills-by-job/${encodedProgram}?job_title=${encodedJob}`;
+        console.log("API URL:", url);
+        const response = await fetch(url);
+        console.log("Response status:", response.status);
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Custom job skills received:", data.skills);
+          setCustomJobSkills(data.skills || []);
+        } else {
+          console.error("API error:", response.status);
+          setCustomJobSkills([]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch custom job skills:", err);
+        setCustomJobSkills([]);
+      } finally {
+        setCustomJobSkillsLoading(false);
+      }
+    };
+
+    const debounce = setTimeout(fetchCustomJobSkills, 500);
+    return () => clearTimeout(debounce);
+  }, [selectedProgram, isCustomJob, customJobTitle]);
 
   const { data: programsData } = useGetPrograms({
     query: { queryKey: getGetProgramsQueryKey() },
@@ -85,7 +129,7 @@ export default function Assessment() {
     {
       query: {
         queryKey: getGetSkillsByProgramQueryKey(selectedProgram),
-        enabled: !!selectedProgram,
+        enabled: !!selectedProgram && !isCustomJob,
       },
     }
   );
@@ -94,7 +138,21 @@ export default function Assessment() {
 
   const programs: string[] = programsData?.programs ?? PROGRAMS_FALLBACK;
   const jobOptions: string[] = jobsData?.jobs ?? [];
-  const skills = skillsData?.skills ?? [];
+
+  // Use custom job skills if available, otherwise use CHED CMO skills
+  const skills = isCustomJob && customJobSkills.length > 0
+    ? customJobSkills
+    : skillsData?.skills ?? [];
+
+  // Check if skills are loading (either from custom job or CHED CMO)
+  const isSkillsLoading = isCustomJob ? customJobSkillsLoading : skillsLoading;
+
+  // Check for underemployment - custom job not in the program job list
+  const isUnderemployed = useMemo(() => {
+    if (!isCustomJob || !customJobTitle.trim()) return false;
+    const normalizedInput = customJobTitle.trim().toLowerCase();
+    return !jobOptions.some(job => job.toLowerCase() === normalizedInput);
+  }, [isCustomJob, customJobTitle, jobOptions]);
 
   const allSkillsRated = skills.length > 0 && skills.every((s) => skillRatings[s.id] !== undefined);
   const canSubmit = !!selectedProgram && !!jobTitle && allSkillsRated;
@@ -104,6 +162,9 @@ export default function Assessment() {
   const handleProgramSelect = (program: string) => {
     setSelectedProgram(program);
     setJobTitle("");
+    setCustomJobTitle("");
+    setIsCustomJob(false);
+    setCustomJobSkills([]);
     setSkillRatings({});
     setOpen(false);
     setError("");
@@ -303,18 +364,65 @@ export default function Assessment() {
                   <span className="text-sm text-muted-foreground">Loading job titles...</span>
                 </div>
               ) : (
-                <Select value={jobTitle} onValueChange={(v) => { setJobTitle(v); setError(""); }}>
-                  <SelectTrigger className={`h-11 text-sm border-2 transition-all ${jobTitle ? "border-primary/40 bg-primary/5" : "border-border hover:border-primary/30"}`}>
-                    <SelectValue placeholder="Select a job title..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {jobOptions.map((job) => (
-                      <SelectItem key={job} value={job} className="py-2.5 cursor-pointer">
-                        {job}
+                <div className="space-y-2">
+                  <Select
+                    value={isCustomJob ? "__other__" : jobTitle}
+                    onValueChange={(v) => {
+                      if (v === "__other__") {
+                        setIsCustomJob(true);
+                        setJobTitle("");
+                      } else {
+                        setIsCustomJob(false);
+                        setCustomJobSkills([]);
+                        setJobTitle(v);
+                        setCustomJobTitle("");
+                        setError("");
+                      }
+                    }}
+                  >
+                    <SelectTrigger className={`h-11 text-sm border-2 transition-all ${(jobTitle || isCustomJob) ? "border-primary/40 bg-primary/5" : "border-border hover:border-primary/30"}`}>
+                      <SelectValue placeholder="Select a job title..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {jobOptions.map((job) => (
+                        <SelectItem key={job} value={job} className="py-2.5 cursor-pointer">
+                          {job}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="__other__" className="py-2.5 cursor-pointer font-medium text-primary">
+                        Other (Specify)
                       </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                    </SelectContent>
+                  </Select>
+
+                  {/* Custom Job Input */}
+                  {isCustomJob && (
+                    <Input
+                      placeholder="Enter your job title..."
+                      value={customJobTitle}
+                      onChange={(e) => {
+                        setCustomJobTitle(e.target.value);
+                        setJobTitle(e.target.value);
+                        setError("");
+                      }}
+                      className="h-11 text-sm border-2 border-primary/40 bg-primary/5"
+                    />
+                  )}
+
+                  {/* Underemployment Warning */}
+                  {isUnderemployed && (
+                    <div className="p-3 rounded-lg border border-red-300 bg-red-50 text-red-700 text-sm">
+                      <span className="font-medium">Note:</span> You are underemployed. Your job title "{customJobTitle}" is not in the CHED CMO curriculum for {selectedProgram}.
+                    </div>
+                  )}
+
+                  {/* Job aligned message when custom job matches a program job */}
+                  {isCustomJob && !isUnderemployed && customJobTitle.trim() && (
+                    <div className="p-3 rounded-lg border border-green-300 bg-green-50 text-green-700 text-sm">
+                      <span className="font-medium">Note:</span> Your job is aligned with {selectedProgram} curriculum.
+                    </div>
+                  )}
+                </div>
               )}
             </div>
 
@@ -334,10 +442,12 @@ export default function Assessment() {
                 <div className="p-4 rounded-lg border-2 border-dashed border-border bg-muted/30 text-center">
                   <span className="text-sm text-muted-foreground">Select your job title to unlock skill rating</span>
                 </div>
-              ) : skillsLoading ? (
+              ) : isSkillsLoading ? (
                 <div className="p-4 rounded-lg border border-border bg-muted/30 flex items-center gap-3">
                   <Spinner className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Loading CHED CMO skills...</span>
+                  <span className="text-sm text-muted-foreground">
+                    {isCustomJob ? "Deriving skills from job task distribution..." : "Loading CHED CMO skills..."}
+                  </span>
                 </div>
               ) : (
                 <>

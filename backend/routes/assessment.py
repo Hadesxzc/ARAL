@@ -32,16 +32,50 @@ def _load_cmos() -> dict:
         return json.load(f)
 
 
+def _load_jobs() -> dict:
+    path = os.path.join(DATA_DIR, "jobs_by_program.json")
+    with open(path) as f:
+        return json.load(f)
+
+
 def _load_program_skills() -> dict[str, list[str]]:
     cmos = _load_cmos()
     return {prog: [s["id"] for s in data["skills"]] for prog, data in cmos.items()}
 
 
 def _get_skill_label(skill_id: str, cmos: dict) -> str:
+    # First check CHED CMO data
     for program_data in cmos.values():
         for skill in program_data.get("skills", []):
             if skill["id"] == skill_id:
                 return skill["label"]
+
+    # Task-based skill labels
+    TASK_SKILL_LABELS = {
+        "skill_teaching": "Teaching",
+        "skill_mentoring": "Mentoring",
+        "skill_communication": "Communication",
+        "skill_critical_thinking": "Critical Thinking",
+        "skill_problem_solving": "Problem Solving",
+        "skill_leadership": "Leadership",
+        "skill_data_analysis": "Data Analysis",
+        "skill_data_entry": "Data Entry",
+        "skill_document_mgmt": "Document Management",
+        "skill_digital_literacy": "Digital Literacy",
+        "skill_analytics": "Analytics",
+        "skill_client_relations": "Client Relations",
+        "skill_teamwork": "Teamwork",
+        "skill_interpersonal": "Interpersonal Skills",
+        "skill_management": "Management",
+        "skill_creativity": "Creativity",
+        "skill_caregiving": "Caregiving",
+        "skill_empathy": "Empathy",
+        "skill_physical": "Physical Skills",
+    }
+
+    if skill_id in TASK_SKILL_LABELS:
+        return TASK_SKILL_LABELS[skill_id]
+
     return skill_id.replace("skill_", "").replace("_", " ").title()
 
 
@@ -94,21 +128,29 @@ def _compute_skill_gaps(
                 "user_proficiency": None,
             })
     else:
-        # Proficiency-based: skills the user rated low (1-2) that would reduce risk
-        program_skill_ids = program_skills.get(degree_program, [])
-        for skill_id in program_skill_ids:
-            weight = SKILL_RISK_WEIGHTS.get(skill_id, 0)
+        # For custom jobs, show ALL user-rated skills as gaps to generate recommendations
+        user_skill_ids = set(skills.keys())
+
+        print(f"DEBUG: user_skill_ids = {user_skill_ids}")
+        print(f"DEBUG: user ratings = {skills}")
+
+        # Show ALL user-rated skills as gaps (to generate recommendations)
+        for skill_id in user_skill_ids:
+            weight = SKILL_RISK_WEIGHTS.get(skill_id, -0.05)  # Default protective weight
             user_proficiency = skills.get(skill_id, 3)
-            if weight < 0 and user_proficiency <= 2:
-                in_ched = skill_id in ched_skill_ids
+            in_ched = skill_id in ched_skill_ids
+
+            # For any skill rated 3 or below, show as a potential gap
+            if user_proficiency <= 3:
                 gaps.append({
                     "skill_id": skill_id,
                     "skill_label": _get_skill_label(skill_id, cmos),
                     "in_ched_cmo": in_ched,
-                    "gap_type": "implementation" if in_ched else "design",
+                    "gap_type": "implementation" if in_ched else "task_based",
                     "impact_score": round(abs(weight), 4),
                     "user_proficiency": user_proficiency,
                 })
+            print(f"DEBUG: skill {skill_id}, weight={weight}, prof={user_proficiency}")
         # Sort by impact score
         gaps.sort(key=lambda x: x["impact_score"], reverse=True)
         # Fill from SHAP if few gaps found
@@ -165,8 +207,38 @@ async def submit_assessment(body: AssessmentInput):
     task_distribution = body.task_distribution or {}
     use_typical = len(skills) == 0
 
+    print(f"=== ASSESSMENT DEBUG ===")
+    print(f"degree_program: {body.degree_program}")
+    print(f"job_title: {body.job_title}")
+    print(f"skills received: {skills}")
+    print(f"task_distribution: {task_distribution}")
+    print(f"use_typical: {use_typical}")
+
     # If no skills provided, use program typical profile (proficiency=3)
     effective_skills = skills if skills else _get_program_typical_skills(body.degree_program)
+
+    # For custom jobs, find the job's task distribution
+    is_custom_job = False
+    if body.job_title:
+        jobs_data = _load_jobs()
+        input_lower = body.job_title.lower().strip()
+
+        # Search for the job across all programs
+        matched_job = None
+        for prog, program_jobs in jobs_data.items():
+            for job in program_jobs:
+                job_title_cmp = job["title"].lower().strip()
+                if job_title_cmp == input_lower or input_lower in job_title_cmp or job_title_cmp in input_lower:
+                    matched_job = job
+                    break
+            if matched_job:
+                break
+
+        # If we found a matching job and it's different from expected program jobs
+        if matched_job:
+            # Use the matched job's task distribution
+            task_distribution = matched_job.get("tasks", {})
+            is_custom_job = matched_job.get("title", "") != body.job_title
 
     try:
         result = predict(
@@ -205,15 +277,37 @@ async def submit_assessment(body: AssessmentInput):
         shap_explanation = {"top_risk_factors": [], "top_protective_factors": []}
 
     cmos = _load_cmos()
+    print(f"Computing skill gaps with effective_skills: {effective_skills}")
     skill_gaps = _compute_skill_gaps(
         body.degree_program, effective_skills, shap_explanation, cmos, use_typical=use_typical
     )
+    print(f"Skill gaps computed: {skill_gaps}")
 
     try:
+        print(f"Generating recommendations for {len(skill_gaps)} gaps")
         recommendations = generate_recommendations(skill_gaps, body.degree_program, body.job_title)
+        print(f"Recommendations generated: {len(recommendations)}")
     except Exception as e:
         print(f"Recommendation error: {e}")
         recommendations = []
+
+    # Get matched job info for response
+    matched_job_for_response = None
+    if body.job_title and task_distribution:
+        jobs_data = _load_jobs()
+        input_lower = body.job_title.lower().strip()
+        for prog, program_jobs in jobs_data.items():
+            for job in program_jobs:
+                job_title_cmp = job["title"].lower().strip()
+                if job_title_cmp == input_lower or input_lower in job_title_cmp or job_title_cmp in input_lower:
+                    matched_job_for_response = {
+                        "title": job["title"],
+                        "source_program": prog,
+                        "task_distribution": task_distribution,
+                    }
+                    break
+            if matched_job_for_response:
+                break
 
     return {
         "vulnerability_score": score,
@@ -226,6 +320,11 @@ async def submit_assessment(body: AssessmentInput):
         "skill_gaps": skill_gaps,
         "recommendations": recommendations,
         "program_comparison": {k: round(v, 4) for k, v in program_averages.items()},
+        "analysis_meta": {
+            "input_job_title": body.job_title,
+            "matched_job": matched_job_for_response,
+            "used_task_distribution": bool(task_distribution),
+        },
     }
 
 
