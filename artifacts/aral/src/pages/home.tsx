@@ -28,7 +28,7 @@ const STEPS = [
 const FEATURES = [
   {
     title: "Random Forest Prediction",
-    description: "Trained on 1,000 Filipino graduate respondents from the Philippine Occupation-Automation Reference Dataset (POARD).",
+    description: "Trained on Filipino graduate respondents from the Philippine Occupation-Automation Reference Dataset (POARD).",
   },
   {
     title: "SHAP Explainability",
